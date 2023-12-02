@@ -28,6 +28,7 @@ public class FrontServlet extends HttpServlet {
 
     }
 
+    // local variable 하기 때문에 Thread-safety하다.
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp){
         try{

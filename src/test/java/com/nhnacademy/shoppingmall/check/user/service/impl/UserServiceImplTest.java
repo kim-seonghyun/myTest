@@ -49,11 +49,19 @@ class UserServiceImplTest {
     @Test
     @DisplayName("save user")
     void saveUser() {
+        //when은 test를 위해 userRepository의 countByUserId, save() 메소드의 동작을 가짜로 만듬.
 
+        // countByUserId 메소드가 호출될때 0을 반환하도록 한다.
+        // 사용자가 없는 상황을 가정
         Mockito.when(userRepository.countByUserId(anyString())).thenReturn(0);
+        // save 메소드가 실행될때 1을 반환하도록 함.
+        // 사용자가 성공적으로 저장됐다는 뜻
         Mockito.when(userRepository.save(any())).thenReturn(1);
+        // 테스트할 메소드 saveUser 테스트
         userService.saveUser(testUser);
+        // userRepository의 countByUserId 메소드가 정확히 한번 호출됐는지 확인
         Mockito.verify(userRepository,Mockito.times(1)).countByUserId(anyString());
+        // save() 메소드가 정확히 한번 호출됐는지 확인.
         Mockito.verify(userRepository,Mockito.times(1)).save(any());
 
     }
