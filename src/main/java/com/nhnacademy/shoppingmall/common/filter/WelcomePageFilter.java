@@ -11,12 +11,17 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Slf4j
-
+@WebFilter(urlPatterns = "/")
 public class WelcomePageFilter extends HttpFilter {
 
     @Override
     protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
         //todo#9 /요청이 오면 welcome page인 index.do redirect 합니다.
-
+        log.debug("welcomePageFilter 실행");
+        if (req.getServletPath().equals("/")) {
+            res.sendRedirect("/index.do");
+        }else{
+            chain.doFilter(req,res);
+        }
     }
 }
