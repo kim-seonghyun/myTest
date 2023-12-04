@@ -103,14 +103,12 @@ public class UserRepositoryImpl implements UserRepository {
             ps.setTimestamp(7, user.getCreatedAt() != null ? Timestamp.valueOf(user.getCreatedAt()) : null);
             ps.setTimestamp(8, user.getLatestLoginAt() != null ? Timestamp.valueOf(user.getLatestLoginAt()) : null);
 
-            if (user.getLatestLoginAt() == null) {
-                ps.setString(8, null);
-            } else {
-                ps.setString(8, user.getLatestLoginAt().toString());
-            }
-
             return ps.executeUpdate();
         } catch (SQLException e) {
+            log.debug("save 에러 " + e.getMessage());
+            throw new RuntimeException(e);
+        } catch (RuntimeException e) {
+            log.debug("save 에러 " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
