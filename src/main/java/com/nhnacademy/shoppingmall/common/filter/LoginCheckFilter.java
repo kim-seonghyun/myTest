@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -20,21 +21,20 @@ public class LoginCheckFilter extends HttpFilter {
             throws IOException, ServletException {
         //todo#10 /mypage/ 하위경로의 접근은 로그인한 사용자만 접근할 수 있습니다.
 
-//        if (req.getServletPath().contains("/mypage")) {
-        User user = (User) req.getAttribute("user");
-        if (Objects.nonNull(user)) {
-            if (user.getUserAuth().equals(Auth.ROLE_USER)) {
+        HttpSession session = req.getSession(false);
+        if (Objects.isNull(session) ) {
+            res.sendError(403, "login user only");
+            return;
+        }
+        User user = (User) session.getAttribute("user");
+        if (Objects.isNull(user)) {
+            res.sendRedirect("/login.do");
+        }else{
+            if (user.getUserAuth().equals(Auth.ROLE_USER) || user.getUserAuth().equals(Auth.ROLE_ADMIN)) {
                 chain.doFilter(req, res);
             } else {
-                res.sendRedirect("/login.do");
+                res.sendError(403, "login user only");
             }
-        } else {
-            res.sendRedirect("/login.do");
         }
-//        } else {
-//            log.debug("loginCheckFilter 다음 필터로 넘김");
-//            chain.doFilter(req, res);
-//        }
-
     }
 }
