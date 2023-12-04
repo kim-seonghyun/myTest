@@ -14,10 +14,9 @@ public class LogoutController implements BaseController {
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
         HttpSession session = req.getSession(false);
-        if (Objects.nonNull(session)) {
-            if (session.getAttribute("user_id") != null){
+        if (Objects.nonNull(session) && (Objects.nonNull( session.getAttribute("user")))){
                 session.invalidate();
-            }
+
         }
         return "redirect:/login.do";
     }
