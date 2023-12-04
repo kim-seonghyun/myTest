@@ -8,21 +8,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-@RequestMapping(method = Method.POST, value = "/logoutAction.do")
+@RequestMapping(method = Method.GET, value = "/logoutAction.do")
 public class LogoutController implements BaseController {
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
-        String id = req.getParameter("user_id");
         HttpSession session = req.getSession(false);
         if (Objects.nonNull(session)) {
-            if (session.getAttribute("user_id").equals(id)){
+            if (session.getAttribute("user_id") != null){
                 session.invalidate();
             }
-            return "/login.do";
-        } else {
-            return "/index.do";
         }
+        return "redirect:/login.do";
     }
 
     //todo#13-3 로그아웃 구현
