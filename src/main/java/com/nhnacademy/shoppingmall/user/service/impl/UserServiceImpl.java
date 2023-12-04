@@ -22,10 +22,7 @@ public class UserServiceImpl implements UserService {
     public User getUser(String userId){
         //todo#4-1 회원조회
         Optional<User> user = userRepository.findById(userId);
-        if (user.isPresent()) {
-            return user.get();
-        }
-        return null;
+        return user.orElse(null);
     }
 
     @Override
@@ -56,6 +53,20 @@ public class UserServiceImpl implements UserService {
             throw new UserNotFoundException(userId);
         }
         userRepository.deleteByUserId(userId);
+
+    }
+
+    @Override
+    public void savePoint(String userId, int userPoint) {
+        Optional<User> user = userRepository.findById(userId);
+
+        if (user.isPresent()) {
+            User presentUser = user.get();
+            presentUser.setUserPoint(presentUser.getUserPoint() + userPoint);
+            userRepository.update(presentUser);
+        }else{
+            throw new UserNotFoundException(userId);
+        }
 
     }
 

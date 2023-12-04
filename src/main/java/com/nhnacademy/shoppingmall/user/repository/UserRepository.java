@@ -4,7 +4,7 @@ import com.nhnacademy.shoppingmall.user.domain.User;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
-
+// 무엇을
 public interface UserRepository {
     Optional<User> findByUserIdAndUserPassword(String userId, String userPassword);
     Optional<User> findById(String userId);
