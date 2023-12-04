@@ -10,7 +10,9 @@
     - [x] 회원가입 페이지 /signup.do
     - [x] 회원가입 controller ( GET, POST) /signup.do
     - [x] 회원탈퇴 controller (POST) /signout.do
-- [ ] 회원은 1개 이상의 주소를 설정 할 수 있습니다.
+- [x] 회원은 1개 이상의 주소를 설정 할 수 있습니다.
+- [x] address Table 추가 - UserId를 foreignKey로 가짐.
+- [ ] addressPostController /addressPostController.do
 
 == 장바구니
 - [ ] 상품을 장바구니에 담을 수 있습니다.

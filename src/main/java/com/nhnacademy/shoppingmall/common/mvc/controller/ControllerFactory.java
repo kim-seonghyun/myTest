@@ -2,8 +2,8 @@ package com.nhnacademy.shoppingmall.common.mvc.controller;
 
 import com.nhnacademy.shoppingmall.common.mvc.annotation.RequestMapping;
 import com.nhnacademy.shoppingmall.common.mvc.exception.ControllerNotFoundException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -36,29 +36,34 @@ public class ControllerFactory {
          * 3. @RequestMapping(method = RequestMapping.Method.GET,value = {"/index.do","/main.do"}) 처럼 value는 String 배열일 수 있습니다.
          *  즉 /index.do, /main.do -> IndexController로 맵핑 됩니다.
          */
-        for (Class<?> clazz : c) {
-            try {
-                // BaseController를 구현한 클래스의 인스턴스를 생성합니다.
-                BaseController controller = (BaseController) clazz.getDeclaredConstructor().newInstance();
-                if (clazz.getAnnotation(RequestMapping.class) != null) {
-                    RequestMapping requestMapping = clazz.getAnnotation(RequestMapping.class);
+        for (Class clazz : c) {
+            try{
+                BaseController baseController = (BaseController) clazz.getDeclaredConstructor().newInstance();
+                if (clazz.isAnnotationPresent(RequestMapping.class)) {
+                    RequestMapping requestMapping = (RequestMapping) clazz.getAnnotation(RequestMapping.class);
                     RequestMapping.Method requestMethod = requestMapping.method();
-                    String[] requestValues = requestMapping.value();
+                    String[] value = requestMapping.value();
 
-                    for (String value : requestValues) {
-                        String key = requestMethod.name() + "-" + value;
-                        beanMap.put(key, controller);
+                    for (String path : value) {
+                        String key = getKey(requestMethod.name(), path);
+                        beanMap.put(key, baseController);
                     }
+
                 }
-            } catch (Exception e) {
-                log.error("Failed to initialize ControllerFactory", e);
+
+            } catch (InvocationTargetException e) {
+                throw new RuntimeException(e);
+            } catch (InstantiationException e) {
+                throw new RuntimeException(e);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            } catch (NoSuchMethodException e) {
+                throw new RuntimeException(e);
             }
         }
 
-        // ServletContext에 ControllerFactory를 속성으로 추가합니다.
-        ctx.setAttribute(CONTEXT_CONTROLLER_FACTORY_NAME, this);
-
         //todo#5-2 ctx(ServletContext)에  attribute를 추가합니다. -> key : CONTEXT_CONTROLLER_FACTORY_NAME, value : ControllerFactory
+        ctx.setAttribute(CONTEXT_CONTROLLER_FACTORY_NAME, this);
     }
 
     private Object getBean(String key) {
