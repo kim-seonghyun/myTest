@@ -1,4 +1,5 @@
 <%@ page import="com.nhnacademy.shoppingmall.user.domain.User" %>
+<%@ page import="java.util.Objects" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" session="true" trimDirectiveWhitespaces="true" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
@@ -20,6 +21,9 @@
 </head>
 <body>
 <div class="mainContainer">
+    <%
+        User user = (User) session.getAttribute("user");
+    %>
     <header class="p-3 bg-dark text-white">
         <div class="container">
             <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
@@ -32,7 +36,14 @@
 
                 <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
                     <li><a href="/index.do" class="nav-link px-2 text-secondary">Home</a></li>
-                    <li><a href="#" class="nav-link px-2 text-white">마이페이지</a></li>
+                    <%
+                        if (Objects.nonNull(user)) {
+                    %>
+                    <li><a href="/mypage.do" class="nav-link px-2 text-white">마이페이지</a></li>
+                    <% }
+                    %>
+
+
                 </ul>
 
                 <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
@@ -41,14 +52,11 @@
                 </form>
 
                 <div class="text-end">
+
                     <%
-                        String id = (String) session.getAttribute("user_id");
-                        String name = (String) session.getAttribute("user_name");
+                        if (Objects.nonNull(user)) {
                     %>
-                    <%
-                        if (id != null) {
-                    %>
-                    <a> <%= name %>님 안녕하세요</a>
+                    <a><%= user.getUserName() %>님 안녕하세요</a>
                     <a class="btn btn-outline-light me-2" href="/logoutAction.do">로그아웃</a>
                     <%
                     } else {

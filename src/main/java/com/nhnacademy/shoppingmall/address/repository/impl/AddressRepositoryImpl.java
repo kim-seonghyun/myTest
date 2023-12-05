@@ -1,8 +1,10 @@
 package com.nhnacademy.shoppingmall.address.repository.impl;
 
 import com.nhnacademy.shoppingmall.address.domain.Address;
+import com.nhnacademy.shoppingmall.address.exception.AddressAlreadyExistsException;
 import com.nhnacademy.shoppingmall.address.repository.AddressRepository;
 import com.nhnacademy.shoppingmall.common.mvc.transaction.DbConnectionThreadLocal;
+import com.nhnacademy.shoppingmall.user.exception.UsersAddressAlreadyExistsException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -40,7 +42,9 @@ public class AddressRepositoryImpl implements AddressRepository {
     public int save(Address address) {
         Connection connection = DbConnectionThreadLocal.getConnection();
         String sql = "insert into address(address_id,address_line1, address_line2, city, sido, postal_code) values(?,?,?,?,?,?) ";
-
+        if (countByAddressId(address.getAddress_id()) > 0) {
+            throw new AddressAlreadyExistsException();
+        }
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, address.getAddress_id());
             ps.setString(2, address.getAddress_line1());
@@ -109,7 +113,11 @@ public class AddressRepositoryImpl implements AddressRepository {
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, address_id);
-            return ps.executeQuery().getInt(1);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+            return 0;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

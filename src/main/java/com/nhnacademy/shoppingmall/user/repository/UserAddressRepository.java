@@ -13,4 +13,7 @@ public interface UserAddressRepository {
 
     // 특정 유저의 주소 리스트
     Optional<UsersAddress> findUsersAdressByUsersIdAndAddressId(String users_id, String address_id);
+
+
+    int countByUserIdAndAddressId(String userId, String addressId);
 }

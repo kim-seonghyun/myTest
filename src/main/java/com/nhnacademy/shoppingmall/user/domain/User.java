@@ -1,9 +1,10 @@
 package com.nhnacademy.shoppingmall.user.domain;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class User {
+public class User implements Serializable {
     public enum Auth{
         ROLE_ADMIN,ROLE_USER
     }
@@ -11,6 +12,11 @@ public class User {
     private String userId;
     private String userName;
     private String userPassword;
+
+    public void setLatestLoginAt(LocalDateTime latestLoginAt) {
+        this.latestLoginAt = latestLoginAt;
+    }
+
     private String userBirth;
     private Auth userAuth;
     private int userPoint;

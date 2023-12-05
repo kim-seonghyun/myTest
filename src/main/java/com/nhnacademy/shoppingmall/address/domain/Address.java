@@ -1,10 +1,11 @@
 package com.nhnacademy.shoppingmall.address.domain;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class Address {
+public class Address implements Serializable {
     private String address_id;
     private String address_line1;
     private String address_line2;

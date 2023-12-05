@@ -23,7 +23,7 @@ public class SignupPostController implements BaseController {
         String id = req.getParameter("user_id");
         String name = req.getParameter("user_name");
         String password = req.getParameter("user_password");
-        String userBirth = String.join("", req.getParameter("user_birth").split("-"));
+        String userBirth = req.getParameter("user_birth");
 
         try {
             User user = new User(id, name, password, userBirth, Auth.ROLE_USER, 1_000_000, LocalDateTime.now(), null);
