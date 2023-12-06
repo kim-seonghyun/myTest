@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ProductsRepository {
+
+    List<Products> findProductAll();
     // (카테고리 포합) 등록,수정, 삭제
     int save(Products products);
 

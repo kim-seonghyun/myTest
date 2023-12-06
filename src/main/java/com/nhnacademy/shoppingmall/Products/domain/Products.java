@@ -1,8 +1,9 @@
 package com.nhnacademy.shoppingmall.Products.domain;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Products {
+public class Products implements Serializable {
     private int productId;
     private int categoryId;
     private String modelNumber;

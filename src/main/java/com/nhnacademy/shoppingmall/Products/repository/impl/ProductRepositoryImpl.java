@@ -10,8 +10,30 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class ProductRepositoryImpl implements ProductsRepository {
+
+    @Override
+    public List<Products> findProductAll() {
+        Connection connection = DbConnectionThreadLocal.getConnection();
+        String sql = "select * from Products";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            List<Products> productsList = new ArrayList<>();
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                log.debug(rs.getString("ProductID"));
+                productsList.add(new Products(rs.getInt("ProductID"), rs.getInt("CategoryID"), rs.getString("ModelNumber"),
+                        rs.getString("ModelName"), rs.getString("ProductImage"), rs.getInt("UnitCost"),
+                        rs.getString("Description")));
+            }
+            return productsList;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @Override
     public int save(Products products) {
@@ -74,7 +96,7 @@ public class ProductRepositoryImpl implements ProductsRepository {
         List<Products>  productsList=new ArrayList<>();
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             ResultSet rs = preparedStatement.executeQuery();
-            if (rs.next()) {
+            while (rs.next()) {
                 productsList.add(new Products(rs.getInt("ProductID"), rs.getInt("CategoryID"), rs.getString("ModelNumber"),
                         rs.getString("ModelName"), rs.getString("ProductImage"), rs.getInt("UnitCost"),
                         rs.getString("Description")));
