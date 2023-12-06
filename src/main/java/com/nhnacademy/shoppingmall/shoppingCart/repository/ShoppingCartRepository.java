@@ -8,4 +8,5 @@ public interface ShoppingCartRepository {
     int countProductByCartIdAndProductId(String cartId, int productId);
 
     int deleteProductByProductId(String cartId, int productId);
+
 }
