@@ -1,25 +1,26 @@
-<%@ page import="com.nhnacademy.shoppingmall.user.domain.User" %>
 <%@ page import="java.util.Objects" %>
-<%@ page import="com.nhnacademy.shoppingmall.user.domain.User.Auth" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" session="true" trimDirectiveWhitespaces="true" %>
+<%@ page import="com.nhnacademy.shoppingmall.user.domain.User" %>
+<%@ page import="com.nhnacademy.shoppingmall.user.domain.User.Auth" %><%--
+  Created by IntelliJ IDEA.
+  User: gimseonghyeon
+  Date: 12/6/23
+  Time: 12:59 PM
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
-<!doctype html>
-<html lang="ko">
+<!DOCTYPE html>
+<html>
 <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-            crossorigin="anonymous"></script>
-    <title>nhn아카데미 shopping mall</title>
+    <title>nhn아카데미 관리자 페이지</title>
 
 </head>
+
 <body>
 <div class="mainContainer">
     <%
@@ -44,6 +45,16 @@
                     <% }
                     %>
 
+                    <%
+                        if (Objects.nonNull(user) && user.getUserAuth().equals(Auth.ROLE_ADMIN)) {
+
+                    %>
+                    <li><a href="/admin.do" class="nav-link px-2 text-white">관리자 페이지</a></li>
+                    <a href="/productList.do" class="btn btn-primary">상품 목록 보기</a>
+
+                <%--                        <li><a href="/admin/index.do" class="nav-link px-2 text-white">관리자 페이지</a></li>--%>
+                    <% }
+                    %>
 
                 </ul>
 
@@ -95,4 +106,21 @@
 </div>
 
 </body>
+
+<body>
+<div class="container">
+    <header>
+        <h1>관리자 페이지</h1>
+    </header>
+    <nav>
+    </nav>
+    <main>
+        <jsp:include page="${content}"/>
+    </main>
+    <footer>
+        <p>© 2023 nhnacademy.com</p>
+    </footer>
+</div>
+</body>
 </html>
+

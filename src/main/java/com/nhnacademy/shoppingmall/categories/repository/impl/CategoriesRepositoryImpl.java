@@ -8,6 +8,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 
@@ -114,8 +116,6 @@ public class CategoriesRepositoryImpl implements CategoriesRepository {
 
             ResultSet rs = preparedStatement.executeQuery();
             if (rs.next()) {
-                log.debug(String.valueOf(rs.getInt("CategoryID")));
-                log.debug(rs.getString("CategoryName"));
                 return Optional.of(new Categories(rs.getInt("CategoryID"), rs.getString("CategoryName")));
             }
         } catch (SQLException e) {
@@ -142,5 +142,22 @@ public class CategoriesRepositoryImpl implements CategoriesRepository {
             throw new RuntimeException(e);
         }
         return Optional.empty();
+    }
+
+    @Override
+    public List<Categories> findAll() {
+        Connection connection = DbConnectionThreadLocal.getConnection();
+
+        String sql = "select * from Categories";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            ResultSet rs = preparedStatement.executeQuery();
+            List<Categories> categoriesList = new ArrayList<>();
+            while (rs.next()) {
+                categoriesList.add(new Categories(rs.getInt("CategoryID"), rs.getString("CategoryName")));
+            }
+            return categoriesList;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

@@ -35,7 +35,6 @@ public class ApplicationListener implements ServletContextListener {
         if (userService.getUser(user.getUserId()) == null) {
             userService.saveUser(user);
         }
-        log.debug(userService.getUser(user.getUserId()).toString());
         DbConnectionThreadLocal.reset();
 
     }

@@ -1,4 +1,8 @@
 package com.nhnacademy.shoppingmall.common.mvc.view;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class ViewResolver {
 
     public static final String DEFAULT_PREFIX="/WEB-INF/views/";
@@ -9,6 +13,7 @@ public class ViewResolver {
     public static final String LAYOUT_CONTENT_HOLDER = "layout_content_holder";
 
     public static final String ADMIN_URL = "/admin/";
+    public static final String ADMIN_URL2 = "/for_admin/";
     private final String prefix;
     private final String postfix;
 
@@ -52,7 +57,8 @@ public class ViewResolver {
            /admin/경로가 포함되었다면 DEFAULT_ADMIN_LAYOUT 반환 합니다.
            /admin/경로가 포함되어 있지않다면 DEFAULT_SHOP_LAYOUT 반환 합니다.
         */
-        if (viewName.contains(ADMIN_URL)) {
+        if (viewName.contains(ADMIN_URL2) || viewName.contains(ADMIN_URL)) {
+            log.debug("실행됨");
             return DEFAULT_ADMIN_LAYOUT;
         }else{
             return DEFAULT_SHOP_LAYOUT;

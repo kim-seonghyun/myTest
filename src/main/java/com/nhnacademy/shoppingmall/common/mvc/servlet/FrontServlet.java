@@ -14,6 +14,7 @@ import com.nhnacademy.shoppingmall.common.mvc.controller.ControllerFactory;
 import java.io.IOException;
 import java.sql.Connection;
 import javax.servlet.ServletConfig;
+import javax.servlet.annotation.MultipartConfig;
 import lombok.extern.slf4j.Slf4j;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -24,6 +25,13 @@ import javax.servlet.http.HttpServletResponse;
 
 @Slf4j
 @WebServlet(name = "frontServlet",urlPatterns = {"*.do"})
+@MultipartConfig(
+        fileSizeThreshold   = 1024 * 1024 * 1,  // 1 MB
+        maxFileSize         = 1024 * 1024 * 10, // 10 MB
+        maxRequestSize      = 1024 * 1024 * 100, // 100 MB
+        //location 위치는 적절히 변경합니다.
+        location = "/Users/gimseonghyeon/nhn/java-servlet-jsp-shoppingmall/src/main/webapp/WEB-INF/views/shop/for_admin/product_image/"
+)
 public class FrontServlet extends HttpServlet {
     private ControllerFactory controllerFactory;
     private ViewResolver viewResolver;

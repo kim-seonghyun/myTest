@@ -1,6 +1,7 @@
 package com.nhnacademy.shoppingmall.categories.repository;
 
 import com.nhnacademy.shoppingmall.categories.domain.Categories;
+import java.util.List;
 import java.util.Optional;
 
 public interface CategoriesRepository {
@@ -20,4 +21,6 @@ public interface CategoriesRepository {
     Optional<Categories> findByCategoriesName(String categoryName);
 
     Optional<Categories> findByCategoryId(int categoryId);
+
+    List<Categories> findAll();
 }

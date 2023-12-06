@@ -4,6 +4,7 @@ import com.nhnacademy.shoppingmall.address.domain.Address;
 import com.nhnacademy.shoppingmall.common.mvc.annotation.RequestMapping;
 import com.nhnacademy.shoppingmall.common.mvc.controller.BaseController;
 import com.nhnacademy.shoppingmall.user.domain.User;
+import com.nhnacademy.shoppingmall.user.domain.User.Auth;
 import com.nhnacademy.shoppingmall.user.exception.UserNotFoundException;
 import com.nhnacademy.shoppingmall.user.repository.impl.UserRepositoryImpl;
 import com.nhnacademy.shoppingmall.user.service.UserService;
@@ -36,8 +37,13 @@ public class LoginPostController implements BaseController {
             user.setLatestLoginAt(LocalDateTime.now());
             userService.updateUser(user);
             HttpSession session = req.getSession();
+
             session.setMaxInactiveInterval(60 * 60);
+            log.debug(user.getUserAuth().toString());
             session.setAttribute("user", user);
+            if (user.getUserAuth().equals(Auth.ROLE_ADMIN)) {
+                return "redirect:/admin/index.do";
+            }
 
             List<Address> addresses = usersAddressService.findByUserId(user.getUserId());
             session.setAttribute("addresses", addresses);
