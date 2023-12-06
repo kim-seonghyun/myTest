@@ -1,4 +1,4 @@
-package com.nhnacademy.shoppingmall.myTest.user.repository.impl;
+package com.nhnacademy.shoppingmall.userAddress.impl;
 
 import com.nhnacademy.shoppingmall.address.domain.Address;
 import com.nhnacademy.shoppingmall.address.repository.AddressRepository;

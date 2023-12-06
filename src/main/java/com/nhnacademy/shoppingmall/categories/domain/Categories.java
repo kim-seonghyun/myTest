@@ -23,7 +23,8 @@ public class Categories {
         return Objects.hash(categoryID, categoryName);
     }
 
-    public Categories( String categoryName) {
+
+    public Categories(String categoryName) {
         this.categoryName = categoryName;
     }
 
@@ -32,12 +33,13 @@ public class Categories {
         this.categoryName = categoryName;
     }
 
+
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
     }
 
     public int getCategoryID() {
-        return categoryID;
+        return this.categoryID;
     }
 
     public String getCategoryName() {

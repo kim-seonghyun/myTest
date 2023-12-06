@@ -14,7 +14,7 @@ import javax.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@WebFilter(urlPatterns = "/mypage/*")
+@WebFilter(urlPatterns = "/mypage.do/*")
 public class LoginCheckFilter extends HttpFilter {
     @Override
     protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain)

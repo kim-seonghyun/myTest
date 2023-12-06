@@ -25,7 +25,9 @@ class CategoriesRepositoryImplTest {
     @BeforeEach
     void setUp() {
         DbConnectionThreadLocal.initialize();
-        testCategories =  categoriesRepository.save("shoes").get();
+        testCategories = new Categories("shoes");
+        categoriesRepository.save(testCategories);
+        testCategories = categoriesRepository.findByCategoriesName("shoes").get();
     }
 
     @AfterEach
@@ -39,10 +41,11 @@ class CategoriesRepositoryImplTest {
     @Order(2)
     void save() {
         String categoryName = "outer";
-        Optional<Categories> optionalCategories = categoriesRepository.save(categoryName);
+        int result = categoriesRepository.save(new Categories(categoryName));
         Assertions.assertAll(
-                () -> Assertions.assertEquals(optionalCategories.get(), categoriesRepository.findByCategoriesId(
-                        optionalCategories.get().getCategoryID()).get())
+                () -> Assertions.assertEquals(1, result),
+                () -> Assertions.assertEquals(testCategories, categoriesRepository.findByCategoriesName(
+                        testCategories.getCategoryName()).get())
         );
     }
 
@@ -51,21 +54,25 @@ class CategoriesRepositoryImplTest {
     void update() {
         testCategories.setCategoryName("신발");
         int result = categoriesRepository.update(testCategories);
+        log.debug(testCategories.getCategoryName());
+        log.debug(categoriesRepository.findByCategoryId(
+                testCategories.getCategoryID()).get().getCategoryName());
         Assertions.assertAll(
                 () -> Assertions.assertEquals(1, result),
-                () -> Assertions.assertEquals(testCategories, categoriesRepository.findByCategoriesId(
-                        testCategories.getCategoryID()).get())
+
+                () -> Assertions.assertEquals(testCategories, categoriesRepository.findByCategoriesName(
+                        testCategories.getCategoryName()).get())
         );
     }
 
     @Test
     @Order(4)
-    void deleteByCategoriesId() {
-        int result = categoriesRepository.deleteByCategoriesId(testCategories.getCategoryID());
+    void deleteByCategoriesName() {
+        int result = categoriesRepository.deleteByCategoriesName(testCategories.getCategoryName());
         Assertions.assertAll(
                 () -> Assertions.assertEquals(1, result),
                 () -> Assertions.assertFalse(
-                        categoriesRepository.findByCategoriesId(testCategories.getCategoryID()).isPresent())
+                        categoriesRepository.findByCategoriesName(testCategories.getCategoryName()).isPresent())
         );
     }
 
@@ -78,8 +85,8 @@ class CategoriesRepositoryImplTest {
 
     @Test
     @Order(1)
-    void findByCategoriesId() {
-        Optional<Categories> categoriesOptional = categoriesRepository.findByCategoriesId(testCategories.getCategoryID());
+    void findByCategoriesName() {
+        Optional<Categories> categoriesOptional = categoriesRepository.findByCategoriesName(testCategories.getCategoryName());
         Assertions.assertEquals(testCategories, categoriesOptional.get());
     }
 }

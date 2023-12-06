@@ -32,6 +32,5 @@ public class CharacterEncodingFilter implements Filter {
         servletRequest.setCharacterEncoding(encoding);
         servletResponse.setCharacterEncoding(encoding);
         filterChain.doFilter(servletRequest, servletResponse);
-
     }
 }
