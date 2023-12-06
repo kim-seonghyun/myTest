@@ -44,6 +44,12 @@
                     <% }
                     %>
 
+                    <%
+                        if (Objects.nonNull(user) && user.getUserAuth().equals(Auth.ROLE_ADMIN)) {
+                    %>
+                    <li><a href="/admin/index.do" class="nav-link px-2 text-white">관리자 페이지</a></li>
+                    <% }
+                    %>
 
                 </ul>
 

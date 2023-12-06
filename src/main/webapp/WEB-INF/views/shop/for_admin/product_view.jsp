@@ -15,6 +15,7 @@
     List<Products> productsList = (List<Products>)request.getAttribute("productsList");
 %>
 <div class="container">
+
     <table class="table">
         <thead>
         <tr>
@@ -28,12 +29,14 @@
         </tr>
         </thead>
         <tbody>
+        <img src = "resources/no-image.png"
+             alt = "Learn HTML5" height = "250" width = "270" />
         <% for (Products product : productsList) { %>
         <tr>
             <td><%= product.getCategoryId() %></td>
             <td><%= product.getModelNumber() %></td>
             <td><%= product.getModelName() %></td>
-            <td><img src="<%= product.getProductImage() %>" alt="Product Image"></td>
+            <td><img width="20" height="20" src="<%= product.getProductImage() %>" alt="Product Image" /></td>
             <td><%= product.getUnitCost() %></td>
             <td><%= product.getDescription() %></td>
             <td><a href="/admin/updateProduct.do?productId=<%= product.getProductId() %>">수정하기</a></td>
