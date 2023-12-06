@@ -1,7 +1,7 @@
-package com.nhnacademy.shoppingmall.Products.repository.impl;
+package com.nhnacademy.shoppingmall.products.repository.impl;
 
-import com.nhnacademy.shoppingmall.Products.domain.Products;
-import com.nhnacademy.shoppingmall.Products.repository.ProductsRepository;
+import com.nhnacademy.shoppingmall.products.domain.Products;
+import com.nhnacademy.shoppingmall.products.repository.ProductsRepository;
 import com.nhnacademy.shoppingmall.common.mvc.transaction.DbConnectionThreadLocal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;

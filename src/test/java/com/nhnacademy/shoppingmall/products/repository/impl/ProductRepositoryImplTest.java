@@ -1,9 +1,9 @@
-package com.nhnacademy.shoppingmall.Products.repository.impl;
+package com.nhnacademy.shoppingmall.products.repository.impl;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.nhnacademy.shoppingmall.Products.domain.Products;
-import com.nhnacademy.shoppingmall.Products.repository.ProductsRepository;
+import com.nhnacademy.shoppingmall.products.domain.Products;
+import com.nhnacademy.shoppingmall.products.repository.ProductsRepository;
 import com.nhnacademy.shoppingmall.categories.domain.Categories;
 import com.nhnacademy.shoppingmall.categories.repository.CategoriesRepository;
 import com.nhnacademy.shoppingmall.categories.repository.impl.CategoriesRepositoryImpl;
@@ -17,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
 
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Slf4j

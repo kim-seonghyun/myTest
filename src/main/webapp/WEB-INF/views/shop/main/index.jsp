@@ -1,4 +1,4 @@
-<%@ page import="com.nhnacademy.shoppingmall.Products.domain.Products" %>
+<%@ page import="com.nhnacademy.shoppingmall.products.domain.Products" %>
 <%@ page import="java.util.List" %><%--
   Created by IntelliJ IDEA.
   User: nhn

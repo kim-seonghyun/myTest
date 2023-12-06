@@ -7,7 +7,7 @@
 --%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.*" %>
-<%@ page import="com.nhnacademy.shoppingmall.Products.domain.Products" %>
+<%@ page import="com.nhnacademy.shoppingmall.products.domain.Products" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 
@@ -29,8 +29,6 @@
         </tr>
         </thead>
         <tbody>
-        <img src = "resources/no-image.png"
-             alt = "Learn HTML5" height = "250" width = "270" />
         <% for (Products product : productsList) { %>
         <tr>
             <td><%= product.getCategoryId() %></td>
@@ -46,4 +44,5 @@
         <% } %>
         </tbody>
     </table>
+    <a href="/admin/productRegistration.do" class="btn btn-success btn-lg m-3">상품 등록하기</a>
 </div>

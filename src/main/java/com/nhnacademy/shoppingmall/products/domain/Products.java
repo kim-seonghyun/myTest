@@ -1,4 +1,4 @@
-package com.nhnacademy.shoppingmall.Products.domain;
+package com.nhnacademy.shoppingmall.products.domain;
 
 import java.io.Serializable;
 import java.util.Objects;

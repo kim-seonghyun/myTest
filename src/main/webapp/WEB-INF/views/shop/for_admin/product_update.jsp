@@ -1,7 +1,7 @@
 <%@ page import="com.nhnacademy.shoppingmall.categories.domain.Categories" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Objects" %>
-<%@ page import="com.nhnacademy.shoppingmall.Products.domain.Products" %><%--
+<%@ page import="com.nhnacademy.shoppingmall.products.domain.Products" %><%--
   Created by IntelliJ IDEA.
   User: gimseonghyeon
   Date: 12/6/23

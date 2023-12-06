@@ -1,7 +1,7 @@
 package com.nhnacademy.shoppingmall.controller.admin;
 
-import com.nhnacademy.shoppingmall.Products.repository.ProductsRepository;
-import com.nhnacademy.shoppingmall.Products.repository.impl.ProductRepositoryImpl;
+import com.nhnacademy.shoppingmall.products.repository.ProductsRepository;
+import com.nhnacademy.shoppingmall.products.repository.impl.ProductRepositoryImpl;
 import com.nhnacademy.shoppingmall.common.mvc.annotation.RequestMapping;
 import com.nhnacademy.shoppingmall.common.mvc.annotation.RequestMapping.Method;
 import com.nhnacademy.shoppingmall.common.mvc.controller.BaseController;

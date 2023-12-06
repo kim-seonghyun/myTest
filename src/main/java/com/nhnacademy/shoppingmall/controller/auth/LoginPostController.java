@@ -47,7 +47,7 @@ public class LoginPostController implements BaseController {
 
             List<Address> addresses = usersAddressService.findByUserId(user.getUserId());
             session.setAttribute("addresses", addresses);
-            return "shop/main/index";
+            return "redirect:/index.do";
         } catch (UserNotFoundException e) {
             return "redirect:/login.do";
         }

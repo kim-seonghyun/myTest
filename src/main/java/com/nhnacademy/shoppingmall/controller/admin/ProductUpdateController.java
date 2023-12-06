@@ -1,8 +1,8 @@
 package com.nhnacademy.shoppingmall.controller.admin;
 
-import com.nhnacademy.shoppingmall.Products.domain.Products;
-import com.nhnacademy.shoppingmall.Products.repository.ProductsRepository;
-import com.nhnacademy.shoppingmall.Products.repository.impl.ProductRepositoryImpl;
+import com.nhnacademy.shoppingmall.products.domain.Products;
+import com.nhnacademy.shoppingmall.products.repository.ProductsRepository;
+import com.nhnacademy.shoppingmall.products.repository.impl.ProductRepositoryImpl;
 import com.nhnacademy.shoppingmall.categories.domain.Categories;
 import com.nhnacademy.shoppingmall.categories.repository.CategoriesRepository;
 import com.nhnacademy.shoppingmall.categories.repository.impl.CategoriesRepositoryImpl;
@@ -10,7 +10,6 @@ import com.nhnacademy.shoppingmall.common.mvc.annotation.RequestMapping;
 import com.nhnacademy.shoppingmall.common.mvc.annotation.RequestMapping.Method;
 import com.nhnacademy.shoppingmall.common.mvc.controller.BaseController;
 import java.util.List;
-import java.util.Objects;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
