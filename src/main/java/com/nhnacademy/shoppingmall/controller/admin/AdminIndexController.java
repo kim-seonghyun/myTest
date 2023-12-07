@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 public class AdminIndexController implements BaseController {
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
+
         return "shop/for_admin/admin_index";
     }
 }

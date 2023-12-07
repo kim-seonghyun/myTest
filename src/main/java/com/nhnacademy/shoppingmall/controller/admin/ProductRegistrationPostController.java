@@ -1,5 +1,6 @@
 package com.nhnacademy.shoppingmall.controller.admin;
 
+import com.nhnacademy.shoppingmall.common.mvc.view.ViewResolver;
 import com.nhnacademy.shoppingmall.products.domain.Products;
 import com.nhnacademy.shoppingmall.products.repository.ProductsRepository;
 import com.nhnacademy.shoppingmall.products.repository.impl.ProductRepositoryImpl;
@@ -20,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 
 public class ProductRegistrationPostController extends HttpServlet implements BaseController {
     private static final String CONTENT_DISPOSITION = "Content-Disposition";
-    private static final String UPLOAD_DIR = "/Users/gimseonghyeon/nhn/java-servlet-jsp-shoppingmall/src/main/webapp/WEB-INF/views/shop/for_admin/product_image";
+
     ProductsRepository productsRepository = new ProductRepositoryImpl();
 
     @Override
@@ -34,7 +35,7 @@ public class ProductRegistrationPostController extends HttpServlet implements Ba
                 fileName = extractFileName(contentDisposition);
 
                 if (imagePart.getSize() > 0) {
-                    imagePart.write(UPLOAD_DIR + File.separator + fileName);
+                    imagePart.write(getAbsolutePath(req, fileName));
                 }
             }
             int categoryId = Integer.parseInt(req.getParameter("categoryId"));
@@ -59,5 +60,9 @@ public class ProductRegistrationPostController extends HttpServlet implements Ba
             }
         }
         return null;
+    }
+
+    private String getAbsolutePath(HttpServletRequest req, String fileName) {
+        return req.getServletContext().getRealPath(ViewResolver.IMAGE_DIR) + fileName;
     }
 }

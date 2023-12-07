@@ -14,7 +14,7 @@
 %>
 <div style="margin: auto; width: 400px;">
     <div class="p-2">
-        <h1 class="h3 mb-3 fw-normal">상품 등록</h1>
+        <h1 class="h3 mb-3 fw-normal">product register</h1>
         <form action="/admin/productRegistration.do" method="post" enctype="multipart/form-data">
             <div class="form-floating">
                 <select class="form-select" id="categoryId" name="categoryId" required>

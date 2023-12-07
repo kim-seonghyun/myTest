@@ -5,21 +5,17 @@
   Time: 8:12 PM
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.*" %>
 <%@ page import="com.nhnacademy.shoppingmall.products.domain.Products" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     List<Products> productsList = (List<Products>)request.getAttribute("productsList");
 %>
 <div class="container">
-
     <table class="table">
         <thead>
         <tr>
-
             <th>CategoryID</th>
             <th>ModelNumber</th>
             <th>ModelName</th>
@@ -29,16 +25,16 @@
         </tr>
         </thead>
         <tbody>
-        <% for (Products product : productsList) { %>
+        <% for (Products products : productsList) { %>
         <tr>
-            <td><%= product.getCategoryId() %></td>
-            <td><%= product.getModelNumber() %></td>
-            <td><%= product.getModelName() %></td>
-            <td><img width="20" height="20" src="<%= product.getProductImage() %>" alt="Product Image" /></td>
-            <td><%= product.getUnitCost() %></td>
-            <td><%= product.getDescription() %></td>
-            <td><a href="/admin/updateProduct.do?productId=<%= product.getProductId() %>">수정하기</a></td>
-            <td><a href="/admin/deleteProduct.do?productId=<%= product.getProductId() %>">삭제하기</a></td>
+            <td><%= products.getCategoryId() %></td>
+            <td><%= products.getModelNumber() %></td>
+            <td><%= products.getModelName() %></td>
+            <td><%= products.getProductImage() %></td>
+            <td><%= products.getUnitCost() %></td>
+            <td><%= products.getDescription() %></td>
+            <td><a href="/admin/updateProduct.do?productId=<%= products.getProductId() %>">수정하기</a></td>
+            <td><a href="/admin/deleteProduct.do?productId=<%= products.getProductId() %>">삭제하기</a></td>
 
         </tr>
         <% } %>

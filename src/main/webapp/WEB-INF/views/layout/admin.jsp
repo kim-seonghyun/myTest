@@ -50,7 +50,6 @@
 
                     %>
                     <li><a href="/admin/index.do" class="nav-link px-2 text-white">관리자 페이지</a></li>
-                    <a href="/admin/productList.do" class="btn btn-primary">상품 목록 보기</a>
 
                 <%--                        <li><a href="/admin/index.do" class="nav-link px-2 text-white">관리자 페이지</a></li>--%>
                     <% }

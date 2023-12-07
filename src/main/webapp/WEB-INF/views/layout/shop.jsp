@@ -41,6 +41,7 @@
                         if (Objects.nonNull(user)) {
                     %>
                     <li><a href="/mypage.do" class="nav-link px-2 text-white">마이페이지</a></li>
+                    <li><a href="/shoppingCart.do" class="nav-link px-2 text-white">장바구니</a> </li>
                     <% }
                     %>
 
