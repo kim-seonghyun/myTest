@@ -31,9 +31,6 @@ public class ViewResolver {
         this.postfix = postfix;
     }
 
-    public static String getUploadDir(String fileName) {
-        return UPLOAD_DIR + "/" + fileName;
-    }
     public static String getImageDir(String fileName) {
         return IMAGE_DIR + fileName;
     }

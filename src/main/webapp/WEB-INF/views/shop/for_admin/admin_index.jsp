@@ -12,6 +12,5 @@
     <h2 class="mb-5">관리자 페이지</h2>
     <div class="admin-nav">
         <a href="/admin/productList.do" class="btn btn-primary btn-lg m-3">상품 관리</a>
-
     </div>
 </div>
