@@ -14,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ShoppingCartServiceImpl implements ShoppingCartService {
 
@@ -35,11 +36,38 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             ResultSet rs = preparedStatement.executeQuery();
             List<Products> productsList = new ArrayList<>();
             while (rs.next()) {
-                if (productsRepository.findByProductId(rs.getInt(1)).isPresent()){
-                    productsList.add(productsRepository.findByProductId(rs.getInt(1)).get()) ;
+                if (productsRepository.findByProductId(rs.getInt(1)).isPresent()) {
+                    productsList.add(productsRepository.findByProductId(rs.getInt(1)).get());
                 }
             }
             return productsList;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<ShoppingCart> findAllShoppingCartByCartId(String cartId) {
+        Connection connection = DbConnectionThreadLocal.getConnection();
+        String sql = "select * from ShoppingCart where CartID = ?";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, cartId);
+
+            ResultSet rs = preparedStatement.executeQuery();
+            List<ShoppingCart> shoppingCartList = new ArrayList<>();
+
+            while (rs.next()) {
+                if (Objects.nonNull(productsRepository.findByProductId(rs.getInt("ProductId")))) {
+                    shoppingCartList.add(
+                            new ShoppingCart(rs.getString("CartID"), rs.getInt("Quantity"), rs.getInt("ProductID")));
+                }else{
+                    throw new RuntimeException("상품이 존재하지 않습니다.");
+                }
+
+
+            }
+            return shoppingCartList;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

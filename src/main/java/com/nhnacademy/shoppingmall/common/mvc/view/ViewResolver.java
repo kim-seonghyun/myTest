@@ -14,7 +14,6 @@ public class ViewResolver {
 
     public static final String IMAGE_DIR = "resources/images/";
 
-    public static final String UPLOAD_DIR = "/Users/gimseonghyeon/nhn/java-servlet-jsp-shoppingmall/src/main/webapp/resources/images";
     public static final String ADMIN_URL = "/admin/";
     public static final String ADMIN_URL2 = "/for_admin/";
     private final String prefix;

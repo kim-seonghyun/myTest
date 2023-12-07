@@ -7,6 +7,8 @@ import java.util.List;
 public interface ShoppingCartService {
     List<Products> findAllProductsByCartId(String cartId);
 
+    List<ShoppingCart> findAllShoppingCartByCartId(String cartId);
+
     // 유저가 상품 하나를 index페이지에서 추가하는경우
     int save(String cartId, int productId);
 

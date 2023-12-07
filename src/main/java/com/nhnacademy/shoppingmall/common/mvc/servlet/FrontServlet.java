@@ -28,9 +28,8 @@ import javax.servlet.http.HttpServletResponse;
 @MultipartConfig(
         fileSizeThreshold = 1024 * 1024 * 1,  // 1 MB
         maxFileSize = 1024 * 1024 * 10, // 10 MB
-        maxRequestSize = 1024 * 1024 * 100, // 100 MB
+        maxRequestSize = 1024 * 1024 * 100 // 100 MB
         //location 위치는 적절히 변경합니다.
-        location = ViewResolver.UPLOAD_DIR
 )
 public class FrontServlet extends HttpServlet {
     private ControllerFactory controllerFactory;
