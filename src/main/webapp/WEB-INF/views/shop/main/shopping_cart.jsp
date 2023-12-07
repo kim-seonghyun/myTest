@@ -13,6 +13,7 @@
 <%
     List<Products> productList = (List<Products>) request.getAttribute("productList");
     List<ShoppingCart> cartList = (List<ShoppingCart>) request.getAttribute("cartList");
+    int totalCost = 0;
 %>
 
 <div class="container">
@@ -35,6 +36,7 @@
                     int quantity = shoppingCart.getQuantity();
                     for (Products product : productList) {
                         if (product.getProductId() == shoppingCart.getProductId()) {
+                            totalCost += product.getUnitCost() * quantity;
         %>
         <tr>
             <td><%= product.getModelName() %></td>
@@ -53,4 +55,8 @@
         %>
         </tbody>
     </table>
+    <div class="d-flex justify-content-end align-items-center mb-3">
+        <h3 class="mr-3">총 금액 : <%= totalCost %>원</h3>
+        <a href="/order.do" class="btn btn-primary">주문하기</a>
+    </div>
 </div>

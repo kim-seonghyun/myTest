@@ -21,10 +21,11 @@ public class ShoppingCartUpdateController implements BaseController {
         int productId = Integer.parseInt(req.getParameter("productId"));
         int quantity = Integer.parseInt(req.getParameter("quantity"));
         HttpSession sesion = req.getSession();
-        User user = (User) sesion.getAttribute("user");
-        if (Objects.isNull(user)) {
+        if (Objects.isNull(sesion) || Objects.isNull(sesion.getAttribute("user"))) {
             return "redirect:/index.do";
         }
+        User user = (User) sesion.getAttribute("user");
+
 
         if (quantity < 1) {
             return "redirect:/shoppingCart.do";
