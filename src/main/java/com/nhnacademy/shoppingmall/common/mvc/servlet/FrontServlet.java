@@ -72,12 +72,11 @@ public class FrontServlet extends HttpServlet {
         } catch (Exception e) {
             log.error("error:{}", e);
             DbConnectionThreadLocal.setSqlError(true);
-            req.setAttribute("status_code", req.getAttribute(ERROR_STATUS_CODE));
-            req.setAttribute("exception_type", req.getAttribute(ERROR_EXCEPTION_TYPE));
-            req.setAttribute("message", req.getAttribute(ERROR_MESSAGE));
-            req.setAttribute("exception", req.getAttribute(ERROR_EXCEPTION));
-            req.setAttribute("request_uri", req.getAttribute(ERROR_REQUEST_URI));
-            log.error("status_code:{}", req.getAttribute(ERROR_STATUS_CODE));
+            req.setAttribute("status_code", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            req.setAttribute("exception_type", e.getClass().getName());
+            req.setAttribute("message", e.getMessage());
+            req.setAttribute("exception", e);
+            req.setAttribute("request_uri", req.getRequestURI());
             // Error jsp를 만들어야 돼?
             RequestDispatcher rd = req.getRequestDispatcher(viewResolver.getPath("error"));
             try {
@@ -91,7 +90,6 @@ public class FrontServlet extends HttpServlet {
 
         } finally {
             //todo#7-4 connection을 반납합니다.
-            log.debug("finally 실행됨" + req.getServletPath());
             DbConnectionThreadLocal.reset();
         }
     }
