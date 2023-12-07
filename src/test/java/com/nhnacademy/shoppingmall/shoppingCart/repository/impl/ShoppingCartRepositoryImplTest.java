@@ -1,6 +1,9 @@
 package com.nhnacademy.shoppingmall.shoppingCart.repository.impl;
 
 
+import com.nhnacademy.shoppingmall.categories.domain.Categories;
+import com.nhnacademy.shoppingmall.categories.repository.CategoriesRepository;
+import com.nhnacademy.shoppingmall.categories.repository.impl.CategoriesRepositoryImpl;
 import com.nhnacademy.shoppingmall.common.mvc.transaction.DbConnectionThreadLocal;
 import com.nhnacademy.shoppingmall.products.domain.Products;
 import com.nhnacademy.shoppingmall.products.repository.ProductsRepository;
@@ -20,14 +23,21 @@ import org.junit.jupiter.api.Test;
 class ShoppingCartRepositoryImplTest {
     ProductsRepository productsRepository = new ProductRepositoryImpl();
     ShoppingCartRepository shoppingCartRepository = new ShoppingCartRepositoryImpl();
+    CategoriesRepository categoriesRepository = new CategoriesRepositoryImpl();
 
     ShoppingCart shoppingCart;
     Products testProduct;
+    Categories categories;
     @BeforeEach
     void setUp() {
         DbConnectionThreadLocal.initialize();
-        //18번은 Products Table에 존재하는 productId값입니다.
-        shoppingCart = new ShoppingCart("myCart", 3, 18);
+        categories = new Categories("category1");
+        categoriesRepository.save(categories);
+        categories = categoriesRepository.findByCategoriesName("category1").get();
+        testProduct = new Products( categories.getCategoryID(), "model1", "name1", "image1", 100, "description1");
+        productsRepository.save(testProduct);
+        testProduct = productsRepository.findByModelNumber(testProduct.getModelNumber()).get();
+        shoppingCart = new ShoppingCart("myCart", 3, testProduct.getProductId());
         shoppingCartRepository.save(shoppingCart);
     }
 
@@ -40,7 +50,7 @@ class ShoppingCartRepositoryImplTest {
 
     @Test
     void save() {
-        ShoppingCart shoppingCart1 = new ShoppingCart("yourCart", 3, 20);
+        ShoppingCart shoppingCart1 = new ShoppingCart("yourCart", 3, testProduct.getProductId());
         int result = shoppingCartRepository.save(shoppingCart1);
         Assertions.assertAll(
                 () -> Assertions.assertEquals(1, result),

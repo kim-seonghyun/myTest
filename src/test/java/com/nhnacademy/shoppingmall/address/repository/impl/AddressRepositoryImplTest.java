@@ -1,6 +1,7 @@
 package com.nhnacademy.shoppingmall.address.repository.impl;
 
 import com.nhnacademy.shoppingmall.address.domain.Address;
+import com.nhnacademy.shoppingmall.address.exception.AddressAlreadyExistsException;
 import com.nhnacademy.shoppingmall.address.repository.AddressRepository;
 import com.nhnacademy.shoppingmall.address.repository.impl.AddressRepositoryImpl;
 import com.nhnacademy.shoppingmall.common.mvc.transaction.DbConnectionThreadLocal;
@@ -97,12 +98,13 @@ public class AddressRepositoryImplTest {
     @Test
     @Order(6)
     void save_duplicate_address_id() {
-        Throwable throwable = Assertions.assertThrows(RuntimeException.class, ()->{
+        Throwable throwable = Assertions.assertThrows(AddressAlreadyExistsException.class, ()->{
             addressRepository.save(testAddress);
         });
-        Assertions.assertTrue(
-                throwable.getMessage().contains(SQLIntegrityConstraintViolationException.class.getName()));
         log.debug("errorMessage:{}", throwable.getMessage());
+        Assertions.assertTrue(
+                throwable.getMessage().contains("address가 이미 존재합니다."));
+
 
     }
 }
