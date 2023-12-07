@@ -33,7 +33,7 @@ public class DbUtils {
         basicDataSource.setInitialSize(5);
         basicDataSource.setMaxTotal(5);
         basicDataSource.setMaxIdle(5);
-        basicDataSource.setMaxIdle(5);
+        basicDataSource.setMinIdle(5);
 
         //todo#1-3 Validation Query를 설정하세요
 
