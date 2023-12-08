@@ -7,10 +7,12 @@ import com.nhnacademy.shoppingmall.user.domain.User;
 import com.nhnacademy.shoppingmall.user.repository.UserRepository;
 import java.time.LocalDateTime;
 import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 비즈니스 로직을 담당하는 서비스 계층
  */
+@Slf4j
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
@@ -32,18 +34,19 @@ public class UserServiceImpl implements UserService {
             throw new UserAlreadyExistsException(user.getUserId());
         }
         int result = userRepository.save(user);
+        log.debug("saveUser 결과" + result);
         if (result < 1) {
             throw new RuntimeException("Do not save user");
         }
     }
 
     @Override
-    public void updateUser(User user) {
+    public int updateUser(User user) {
         if (userRepository.countByUserId(user.getUserId()) == 0) {
             throw  new UserNotFoundException(user.getUserId());
         }
         //todo#4-3 회원수정
-        userRepository.update(user);
+        return userRepository.update(user);
     }
 
     @Override
@@ -57,13 +60,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void savePoint(String userId, int userPoint) {
+    public int savePoint(String userId, int userPoint) {
         Optional<User> user = userRepository.findById(userId);
 
         if (user.isPresent()) {
             User presentUser = user.get();
-            presentUser.setUserPoint(presentUser.getUserPoint() + userPoint);
-            userRepository.update(presentUser);
+            presentUser.setUserPoint(userPoint);
+            return userRepository.update(presentUser);
         }else{
             throw new UserNotFoundException(userId);
         }
@@ -80,6 +83,17 @@ public class UserServiceImpl implements UserService {
         }else{
             throw new UserNotFoundException(userId);
         }
+    }
+
+    @Override
+    public int getPoint(String userId) {
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isPresent()) {
+            return user.get().getUserPoint();
+        }else{
+            throw new UserNotFoundException(userId);
+        }
+
     }
 
 }

@@ -12,6 +12,8 @@ public interface ShoppingCartService {
     // 유저가 상품 하나를 index페이지에서 추가하는경우
     int save(String cartId, int productId);
 
+    int save(ShoppingCart shoppingCart);
+
     int delete(String cartId, int productId);
 
     // 개수 조절.

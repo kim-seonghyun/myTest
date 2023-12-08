@@ -48,12 +48,16 @@ public class FrontServlet extends HttpServlet {
     // local variable 하기 때문에 Thread-safety하다.
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) {
-        log.debug("service 실행됨");
         DbConnectionThreadLocal.initialize();
         try {
             //todo#7-3 Connection pool로 부터 connection 할당 받습니다. connection은 Thread 내에서 공유됩니다.
             // controller 받아옴
+            log.debug(req.getServletPath());
             BaseController baseController = (BaseController) controllerFactory.getController(req);
+            log.debug("Factory = {}", controllerFactory);
+            log.debug("baseController = {}", baseController);
+            log.debug(baseController.getClass().getName());
+
             // controller로 부터 JSP 경로 받아옴.
             String viewName = baseController.execute(req, resp);
 

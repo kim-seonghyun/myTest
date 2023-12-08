@@ -9,12 +9,14 @@ public interface UserService {
 
     void saveUser(User user);
 
-    void updateUser(User user);
+    int updateUser(User user);
 
     void deleteUser(String userId);
 
-    void savePoint(String userId, int userPoint);
+    int savePoint(String userId, int userPoint);
 
     User doLogin(String userId, String userPassword);
+
+    int getPoint(String userId);
 
 }

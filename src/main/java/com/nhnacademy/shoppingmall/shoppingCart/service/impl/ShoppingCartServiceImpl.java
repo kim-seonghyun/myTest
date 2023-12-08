@@ -79,6 +79,11 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
+    public int save(ShoppingCart shoppingCart) {
+        return shoppingCartRepository.save(shoppingCart);
+    }
+
+    @Override
     public int delete(String cartId, int productId) {
         return shoppingCartRepository.deleteProductByProductId(cartId, productId);
     }
