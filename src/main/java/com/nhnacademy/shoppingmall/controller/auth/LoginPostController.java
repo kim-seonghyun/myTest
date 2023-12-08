@@ -37,15 +37,17 @@ public class LoginPostController implements BaseController {
 
         try {
             User user = userService.doLogin(id, pwd);
-            LocalDate lastLogin = user.getLatestLoginAt().toLocalDate();
-            LocalDate now = LocalDate.now();
+            if(Objects.nonNull(user.getLatestLoginAt())  ){
+                LocalDate lastLogin = user.getLatestLoginAt().toLocalDate();
+                LocalDate now = LocalDate.now();
 
-            if (lastLogin.isBefore(now)) {
-                try {
-                    RequestChannel requestChannel = (RequestChannel) req.getServletContext().getAttribute("requestChannel");
-                    requestChannel.addRequest(new PointChannelRequest(user.getUserId(), user.getUserPoint() + FIRST_LOGIN_POINT));
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e.getMessage());
+                if (lastLogin.isBefore(now)) {
+                    try {
+                        RequestChannel requestChannel = (RequestChannel) req.getServletContext().getAttribute("requestChannel");
+                        requestChannel.addRequest(new PointChannelRequest(user.getUserId(), user.getUserPoint() + FIRST_LOGIN_POINT));
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e.getMessage());
+                    }
                 }
             }
 

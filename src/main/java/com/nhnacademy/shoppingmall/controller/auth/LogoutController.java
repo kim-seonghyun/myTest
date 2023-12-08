@@ -22,7 +22,5 @@ public class LogoutController implements BaseController {
 
     //todo#13-3 로그아웃 구현
 
-    //로그아웃 시 session을 소멸합니다.
-
 
 }

@@ -36,7 +36,6 @@ public class ProductRegistrationPostController extends HttpServlet implements Ba
                 fileName = extractFileName(contentDisposition);
 
                 if (imagePart.getSize() > 0) {
-                    log.debug("실행됨");
                     imagePart.write(getAbsolutePath(req, fileName));
                 }
             }

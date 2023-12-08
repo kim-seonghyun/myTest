@@ -73,6 +73,5 @@ public class OrderController implements BaseController {
         req.setAttribute("pointToAdd", pointToAdd);
         req.setAttribute("totalCost", totalCost);
         return "shop/main/order_result";
-        // 주문 성공 띄우기
     }
 }
