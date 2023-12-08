@@ -114,6 +114,7 @@ CREATE TABLE OrderDetails
     CONSTRAINT fk_OrderDetails_Products FOREIGN KEY (ProductID) REFERENCES Products (ProductID)
 );
 
+
 CREATE TABLE ShoppingCart
 (
     RecordID     int auto_increment,
