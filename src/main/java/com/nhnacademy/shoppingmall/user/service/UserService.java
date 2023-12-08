@@ -4,7 +4,7 @@ import com.nhnacademy.shoppingmall.user.domain.User;
 
 //어떻게
 public interface UserService {
-
+    int additionalPoint(String user_id, int pointToAdd);
     User getUser(String userId);
 
     void saveUser(User user);

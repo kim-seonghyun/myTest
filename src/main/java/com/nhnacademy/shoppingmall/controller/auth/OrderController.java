@@ -15,6 +15,9 @@ import com.nhnacademy.shoppingmall.products.repository.impl.ProductRepositoryImp
 import com.nhnacademy.shoppingmall.shoppingCart.repository.impl.ShoppingCartRepositoryImpl;
 import com.nhnacademy.shoppingmall.shoppingCart.service.ShoppingCartService;
 import com.nhnacademy.shoppingmall.shoppingCart.service.impl.ShoppingCartServiceImpl;
+import com.nhnacademy.shoppingmall.thread.channel.RequestChannel;
+import com.nhnacademy.shoppingmall.thread.request.impl.PointChannelRequest;
+import com.nhnacademy.shoppingmall.thread.worker.WorkerThread;
 import com.nhnacademy.shoppingmall.user.domain.User;
 import com.nhnacademy.shoppingmall.user.repository.UserRepository;
 import com.nhnacademy.shoppingmall.user.repository.impl.UserRepositoryImpl;
@@ -54,8 +57,16 @@ public class OrderController implements BaseController {
         Orders orders = new Orders(userId, LocalDateTime.now(), shipDate);
         log.debug("user가 Order하면 왜 안되는 걸까?");
         orderServices.order(orders);
-        user.setUserPoint(userService.getPoint(userId));
+        int pointAfterOrder = userService.getPoint(userId);
+        user.setUserPoint(pointAfterOrder);
         //쓰레드 호출.
+        RequestChannel requestChannel = (RequestChannel) req.getServletContext().getAttribute("requestChannel");
+        int pointToAdd =  (int)(pointAfterOrder * ((double) 10/100));
+        try {
+            requestChannel.addRequest(new PointChannelRequest(userId,pointToAdd ));
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e.getMessage());
+        }
         return "shop/main/order_result";
         // 주문 성공 띄우기
     }

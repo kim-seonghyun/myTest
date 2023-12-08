@@ -5,6 +5,7 @@ import com.nhnacademy.shoppingmall.categories.repository.CategoriesRepository;
 import com.nhnacademy.shoppingmall.categories.repository.impl.CategoriesRepositoryImpl;
 import com.nhnacademy.shoppingmall.common.mvc.transaction.DbConnectionThreadLocal;
 import com.nhnacademy.shoppingmall.order.domain.Orders;
+import com.nhnacademy.shoppingmall.order.exceptions.InsufficientBalanceException;
 import com.nhnacademy.shoppingmall.order.repository.OrderRepository;
 import com.nhnacademy.shoppingmall.order.repository.impl.OrderRepositoryImpl;
 import com.nhnacademy.shoppingmall.order.services.OrderServices;
@@ -120,8 +121,14 @@ class OrderServicesImplTest {
     void orderFailbyInsufficientPoint() {
         final int INSUFFICIENT_POINT = 2000;
         userService.savePoint(testUser.getUserId(), INSUFFICIENT_POINT);
-        orderServices.order(testOrder);
-        Assertions.assertEquals(INSUFFICIENT_POINT, userService.getUser(testOrder.getUserId()).getUserPoint());
+        Assertions.assertAll(
+                ()->{Assertions.assertThrows(InsufficientBalanceException.class, ()->{
+                    orderServices.order(testOrder);
+                });},
+                () ->{Assertions.assertEquals(INSUFFICIENT_POINT, userService.getUser(testOrder.getUserId()).getUserPoint());}
+        );
+
+
     }
 
 

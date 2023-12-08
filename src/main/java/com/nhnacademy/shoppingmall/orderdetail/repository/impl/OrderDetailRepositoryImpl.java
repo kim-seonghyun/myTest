@@ -25,6 +25,29 @@ public class OrderDetailRepositoryImpl implements OrderDetailRepository {
     }
 
     @Override
+    public int getTotalCost(int orderId) {
+        Connection connection = DbConnectionThreadLocal.getConnection();
+        String sql = "select SUM(Quantity * UnitCost) from OrderDetails where OrderID = ?";
+
+        if (orderRepository.findByOrderId(orderId).isEmpty()) {
+            throw new RuntimeException("주문이 존재하지 않습니다");
+        }
+
+        try(PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, orderId);
+
+            ResultSet rs = preparedStatement.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }else{
+                throw new RuntimeException("주문 상세가 존재하지 않습니다.");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public int save(OrderDetails orderDetails) {
         Connection connection = DbConnectionThreadLocal.getConnection();
         String sql = "insert into OrderDetails(OrderID, ProductID, Quantity, UnitCost) VALUES (?,?,?,?)";

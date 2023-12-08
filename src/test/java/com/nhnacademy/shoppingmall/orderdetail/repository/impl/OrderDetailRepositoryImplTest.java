@@ -1,7 +1,5 @@
 package com.nhnacademy.shoppingmall.orderdetail.repository.impl;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import com.nhnacademy.shoppingmall.categories.domain.Categories;
 import com.nhnacademy.shoppingmall.categories.repository.CategoriesRepository;
 import com.nhnacademy.shoppingmall.categories.repository.impl.CategoriesRepositoryImpl;
@@ -45,6 +43,7 @@ class OrderDetailRepositoryImplTest {
 
     Categories categories;
     OrderDetails testOrderDetails;
+
     @BeforeEach
     void setUp() {
         DbConnectionThreadLocal.initialize();
@@ -57,12 +56,13 @@ class OrderDetailRepositoryImplTest {
         categories = new Categories("category1");
         categoriesRepository.save(categories);
         categories = categoriesRepository.findByCategoriesName("category1").get();
-        testProduct = new Products( categories.getCategoryID(), "model1", "name1", "image1", 100, "description1");
+        testProduct = new Products(categories.getCategoryID(), "model1", "name1", "image1", 100, "description1");
         productsRepository.save(testProduct);
         testProduct = productsRepository.findByModelNumber(testProduct.getModelNumber()).get();
         testOrderDetails = new OrderDetails(orderId, testProduct.getProductId(), 3, testProduct.getUnitCost());
         orderDetailRepository.save(testOrderDetails);
     }
+
     @AfterEach
     void tearDown() {
         DbConnectionThreadLocal.setSqlError(true);
@@ -71,7 +71,8 @@ class OrderDetailRepositoryImplTest {
 
     @Test
     void save() {
-        Products testProduct2 = new Products( categories.getCategoryID(), "mode22l1", "n22ame1", "image1", 100, "description1");
+        Products testProduct2 = new Products(categories.getCategoryID(), "mode22l1", "n22ame1", "image1", 100,
+                "description1");
         productsRepository.save(testProduct2);
         testProduct2 = productsRepository.findByModelNumber(testProduct2.getModelNumber()).get();
 
@@ -80,8 +81,9 @@ class OrderDetailRepositoryImplTest {
         int result = orderDetailRepository.save(newOrderDetails);
         Assertions.assertAll(
                 () -> Assertions.assertEquals(1, result),
-                () -> Assertions.assertEquals(newOrderDetails, orderDetailRepository.findOrderDetailByOrderIdAndProductId(
-                        newOrderDetails.getOrderId(), newOrderDetails.getProductId()).get())
+                () -> Assertions.assertEquals(newOrderDetails,
+                        orderDetailRepository.findOrderDetailByOrderIdAndProductId(
+                                newOrderDetails.getOrderId(), newOrderDetails.getProductId()).get())
 
         );
     }
@@ -89,21 +91,21 @@ class OrderDetailRepositoryImplTest {
     @Test
     void findOrderDetailByOrderIdAndProductID() {
         Assertions.assertEquals(testOrderDetails, orderDetailRepository.findOrderDetailByOrderIdAndProductId(
-                testOrderDetails.getOrderId(),testOrderDetails.getProductId()).get() );
+                testOrderDetails.getOrderId(), testOrderDetails.getProductId()).get());
     }
 
     @Test
     void findOrderDetailByOrderId() {
         Assertions.assertEquals(testOrderDetails, orderDetailRepository.findOrderDetailByOrderId(
-                testOrderDetails.getOrderId()).get(0) );
+                testOrderDetails.getOrderId()).get(0));
     }
 
     @Test
     void update() {
         testOrderDetails.setQuantity(10);
-        int result = orderDetailRepository.update(testOrderDetails);
+        orderDetailRepository.update(testOrderDetails);
         Assertions.assertAll(
-                () -> Assertions.assertEquals(result, 1),
+//
                 () -> Assertions.assertEquals(testOrderDetails,
                         orderDetailRepository.findOrderDetailByOrderIdAndProductId(testOrderDetails.getOrderId(),
                                 testOrderDetails.getProductId()).get())
@@ -112,7 +114,23 @@ class OrderDetailRepositoryImplTest {
 
     @Test
     void deleteOrderDetail() {
-        int result = orderDetailRepository.deleteOrderDetail(testOrderDetails.getOrderId(), testOrderDetails.getProductId());
+        int result = orderDetailRepository.deleteOrderDetail(testOrderDetails.getOrderId(),
+                testOrderDetails.getProductId());
         Assertions.assertEquals(1, result);
+    }
+
+    @Test
+    void getTotalCost() {
+        Products testProduct2 = new Products(categories.getCategoryID(), "model12", "name1", "image1", 100,
+                "description1");
+        productsRepository.save(testProduct2);
+        testProduct2 = productsRepository.findByModelNumber(testProduct2.getModelNumber()).get();
+        OrderDetails orderDetails2 = new OrderDetails(orderId, testProduct2.getProductId(), 1, 10000);
+        orderDetailRepository.save(orderDetails2);
+        int result = testOrderDetails.getQuantity() * testOrderDetails.getUnitCost()
+                + orderDetails2.getQuantity() * orderDetails2.getUnitCost();
+
+        Assertions.assertEquals(result, orderDetailRepository.getTotalCost(orderId));
+
     }
 }

@@ -49,8 +49,8 @@ public class OrderServicesImpl implements OrderServices {
         String sql = "select P.UnitCost, P.ProductID, SC.Quantity from Products P join ShoppingCart SC on P.ProductID = SC.ProductID where SC.CartID = ?";
         log.debug("order 실행됨");
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            int orderId= orderRepository.save(orders);
-            log.debug("orderID order실행중:" +String.valueOf(orderId));
+            int orderId = orderRepository.save(orders);
+            log.debug("orderID order실행중:" + String.valueOf(orderId));
             preparedStatement.setString(1, orders.getUserId());
 
             ResultSet rs = preparedStatement.executeQuery();
@@ -70,13 +70,14 @@ public class OrderServicesImpl implements OrderServices {
                     throw new RuntimeException("shopping cart 삭제 안됨.");
                 }
             }
-            List<OrderDetails> orderDetailsList = orderDetailRepository.findOrderDetailByOrderId(orderId);
+//            List<OrderDetails> orderDetailsList = orderDetailRepository.findOrderDetailByOrderId(orderId);
 
-
-            int totalCost =  orderDetailsList.stream()
-                    .mapToInt(orderDetails -> orderDetails.getQuantity() * orderDetails.getUnitCost()).sum();
-
+//            int totalCost =  orderDetailsList.stream()
+//                    .mapToInt(orderDetails -> orderDetails.getQuantity() * orderDetails.getUnitCost()).sum();
+//
             User user = userService.getUser(orders.getUserId());
+            int totalCost = orderDetailRepository.getTotalCost(orderId);
+
             // int로 부족한경우는?
             int userPoint = user.getUserPoint();
             if (userPoint < totalCost) {
@@ -87,7 +88,9 @@ public class OrderServicesImpl implements OrderServices {
             log.debug("OrderService - 성공");
             return userService.updateUser(user);
             //포인트 적립 요청.
-        } catch (RuntimeException | SQLException e) {
+        } catch (InsufficientBalanceException e) {
+            throw new InsufficientBalanceException(e.getMessage());
+        }catch (RuntimeException | SQLException e) {
             DbConnectionThreadLocal.setSqlError(true);
             throw new RuntimeException(e);
         }
