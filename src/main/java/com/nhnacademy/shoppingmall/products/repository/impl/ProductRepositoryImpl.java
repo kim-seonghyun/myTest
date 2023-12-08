@@ -164,7 +164,7 @@ public class ProductRepositoryImpl implements ProductsRepository {
 
             ResultSet rs = preparedStatement.executeQuery();
             List<Products> products = new ArrayList<>();
-            if (rs.next()) {
+            while (rs.next()) {
                 products.add(new Products(rs.getInt("ProductID"), rs.getInt("CategoryID"), rs.getString("ModelNumber"),
                         rs.getString("ModelName"), rs.getString("ProductImage"), rs.getInt("UnitCost"),
                         rs.getString("Description")));

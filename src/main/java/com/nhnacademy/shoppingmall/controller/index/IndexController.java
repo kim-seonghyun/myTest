@@ -25,7 +25,7 @@ public class IndexController implements BaseController {
         List<Products> productsList = productsRepository.findAll();
         productsList.forEach(products -> products.setProductImage(getImageDir(products.getProductImage())));
         req.setAttribute("productsList", productsList);
-        List<Categories> categoriesList =categoriesRepository.findAll();
+        List<Categories> categoriesList = categoriesRepository.findAll();
         if(Objects.nonNull(categoriesList)){
             req.setAttribute("categories", categoriesList);
         }

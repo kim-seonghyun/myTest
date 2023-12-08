@@ -12,7 +12,7 @@ public class ViewResolver {
     public static final String DEFAULT_ADMIN_LAYOUT="/WEB-INF/views/layout/admin.jsp";
     public static final String LAYOUT_CONTENT_HOLDER = "layout_content_holder";
 
-    public static final String IMAGE_DIR = "resources/images/";
+    public static final String IMAGE_DIR = "resources/";
 
     public static final String ADMIN_URL = "/admin/";
     public static final String ADMIN_URL2 = "/for_admin/";
