@@ -36,6 +36,5 @@ public class ApplicationListener implements ServletContextListener {
             userService.saveUser(user);
         }
         DbConnectionThreadLocal.reset();
-
     }
 }

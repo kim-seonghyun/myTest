@@ -64,7 +64,6 @@ public class ViewResolver {
            /admin/경로가 포함되어 있지않다면 DEFAULT_SHOP_LAYOUT 반환 합니다.
         */
         if (viewName.contains(ADMIN_URL2) || viewName.contains(ADMIN_URL)) {
-            log.debug("실행됨");
             return DEFAULT_ADMIN_LAYOUT;
         }else{
             return DEFAULT_SHOP_LAYOUT;

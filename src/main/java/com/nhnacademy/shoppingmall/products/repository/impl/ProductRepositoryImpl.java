@@ -155,7 +155,23 @@ public class ProductRepositoryImpl implements ProductsRepository {
     }
 
     @Override
-    public int countByModelNumber(String modelNumber, String categoryName) {
-        return 0;
+    public List<Products> findProductsByCategoryId(int categoryId) {
+        Connection connection = DbConnectionThreadLocal.getConnection();
+        String sql = "select * from Products where CategoryID = ?";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, categoryId);
+
+            ResultSet rs = preparedStatement.executeQuery();
+            List<Products> products = new ArrayList<>();
+            if (rs.next()) {
+                products.add(new Products(rs.getInt("ProductID"), rs.getInt("CategoryID"), rs.getString("ModelNumber"),
+                        rs.getString("ModelName"), rs.getString("ProductImage"), rs.getInt("UnitCost"),
+                        rs.getString("Description")));
+            }
+            return products;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

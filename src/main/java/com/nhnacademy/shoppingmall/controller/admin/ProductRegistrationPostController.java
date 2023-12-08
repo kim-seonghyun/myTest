@@ -1,5 +1,6 @@
 package com.nhnacademy.shoppingmall.controller.admin;
 
+import com.nhnacademy.shoppingmall.common.mvc.transaction.DbConnectionThreadLocal;
 import com.nhnacademy.shoppingmall.common.mvc.view.ViewResolver;
 import com.nhnacademy.shoppingmall.products.domain.Products;
 import com.nhnacademy.shoppingmall.products.repository.ProductsRepository;
@@ -35,6 +36,7 @@ public class ProductRegistrationPostController extends HttpServlet implements Ba
                 fileName = extractFileName(contentDisposition);
 
                 if (imagePart.getSize() > 0) {
+                    log.debug("실행됨");
                     imagePart.write(getAbsolutePath(req, fileName));
                 }
             }

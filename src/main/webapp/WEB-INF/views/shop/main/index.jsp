@@ -1,5 +1,7 @@
 <%@ page import="com.nhnacademy.shoppingmall.products.domain.Products" %>
-<%@ page import="java.util.List" %><%--
+<%@ page import="java.util.List" %>
+<%@ page import="com.nhnacademy.shoppingmall.categories.domain.Categories" %>
+<%@ page import="java.util.Objects" %><%--
   Created by IntelliJ IDEA.
   User: nhn
   Date: 2023/11/08
@@ -10,25 +12,45 @@
 <%
     // 서버에서 이미지 리스트를 가져옵니다.
     List<Products> productsList = (List<Products>) request.getAttribute("productsList");
+    List<Categories> categoriesList = (List<Categories>) request.getAttribute("categories");
 %>
 
+
 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+    <form method="POST" action="/index.do">
+        <div class="form-floating">
+            <select class="form-select" id="categoryId" name="categoryId" required>
+                <option selected value="">카테고리 선택</option>
+                <%
+                    if(Objects.nonNull(categoriesList)){
+                        for (Categories category : categoriesList) {
+                %>
+                <option value="<%=category.getCategoryID()%>"><%=category.getCategoryName()%></option>
+                <%
+                        }}
+                %>
+            </select>
+            <label for="categoryId">카테고리 ID</label>
+        </div>
+        <input type="submit" value="submit">
+    </form>
     <% for (Products products : productsList) { %>
     <div class="col">
         <div class="card shadow-sm">
             <img class="card-img-top" src="<%= products.getProductImage() %>" onerror="this.src='resources/no-image.png';" alt="resources/no-image.png" width="100%" height="225">
             <div class="card-body">
-                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                <h5 class="card-title text-primary">상품 이름 : <%= products.getModelName() %></h5>
+                <p class="card-text"><small class="text-muted">상품 설명 : </small><%= products.getDescription() %></p>
+                <p class="card-text"><small class="text-muted">상품 가격 : </small><%= products.getUnitCost() %></p>
+                <p class="card-text"><small class="text-muted">상품 번호 : </small><%= products.getProductId() %></p>
+
                 <div class="d-flex justify-content-between align-items-center">
                     <div class="btn-group">
                         <button type="button" onclick="location.href='/addShoppingCart.do?productId=<%= products.getProductId() %>'" class="btn btn-sm btn-outline-secondary">장바구니에 추가</button>
-                        <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
                     </div>
-                    <small class="text-muted">9 mins</small>
                 </div>
             </div>
         </div>
     </div>
     <% } %>
 </div>
-

@@ -26,10 +26,9 @@ import javax.servlet.http.HttpServletResponse;
 @Slf4j
 @WebServlet(name = "frontServlet", urlPatterns = {"*.do"})
 @MultipartConfig(
-        fileSizeThreshold = 1024 * 1024 * 1,  // 1 MB
-        maxFileSize = 1024 * 1024 * 10, // 10 MB
+        fileSizeThreshold = 1024 * 1024 * 3,  // 1 MB
+        maxFileSize = 1024 * 1024 * 50, // 10 MB
         maxRequestSize = 1024 * 1024 * 100 // 100 MB
-        //location 위치는 적절히 변경합니다.
 )
 public class FrontServlet extends HttpServlet {
     private ControllerFactory controllerFactory;
@@ -81,7 +80,6 @@ public class FrontServlet extends HttpServlet {
             req.setAttribute("message", e.getMessage());
             req.setAttribute("exception", e);
             req.setAttribute("request_uri", req.getRequestURI());
-            // Error jsp를 만들어야 돼?
             RequestDispatcher rd = req.getRequestDispatcher(viewResolver.getPath("error"));
             try {
                 rd.forward(req, resp);

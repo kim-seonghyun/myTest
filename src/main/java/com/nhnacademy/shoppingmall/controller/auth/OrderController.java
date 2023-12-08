@@ -17,7 +17,6 @@ import com.nhnacademy.shoppingmall.shoppingCart.service.ShoppingCartService;
 import com.nhnacademy.shoppingmall.shoppingCart.service.impl.ShoppingCartServiceImpl;
 import com.nhnacademy.shoppingmall.thread.channel.RequestChannel;
 import com.nhnacademy.shoppingmall.thread.request.impl.PointChannelRequest;
-import com.nhnacademy.shoppingmall.thread.worker.WorkerThread;
 import com.nhnacademy.shoppingmall.user.domain.User;
 import com.nhnacademy.shoppingmall.user.repository.UserRepository;
 import com.nhnacademy.shoppingmall.user.repository.impl.UserRepositoryImpl;
@@ -59,16 +58,20 @@ public class OrderController implements BaseController {
 
         //쓰레드 호출.
         RequestChannel requestChannel = (RequestChannel) req.getServletContext().getAttribute("requestChannel");
-        int pointToAdd = (int) (orderDetailRepository.getTotalCost(orderId) * (0.1));
-        log.debug(String.valueOf(pointToAdd));
+        int totalCost = orderDetailRepository.getTotalCost(orderId);
+        int pointToAdd = (int) (totalCost * (0.1));
+        log.debug("totalcost={}", orderDetailRepository.getTotalCost(orderId));
+
+        log.debug("pointToadd={}", pointToAdd);
         user.setUserPoint(pointAfterOrder);
         try {
-            requestChannel.addRequest(new PointChannelRequest(userId, pointAfterOrder + pointToAdd ));
+            requestChannel.addRequest(new PointChannelRequest(userId, pointAfterOrder + pointToAdd));
         } catch (InterruptedException e) {
             throw new RuntimeException(e.getMessage());
         }
-        req.setAttribute("pointAfterOrder" , pointAfterOrder);
+        req.setAttribute("pointAfterOrder", pointAfterOrder);
         req.setAttribute("pointToAdd", pointToAdd);
+        req.setAttribute("totalCost", totalCost);
         return "shop/main/order_result";
         // 주문 성공 띄우기
     }

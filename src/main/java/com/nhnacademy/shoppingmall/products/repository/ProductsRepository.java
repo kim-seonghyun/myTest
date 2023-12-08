@@ -20,6 +20,6 @@ public interface ProductsRepository {
 
     Optional<Products> findByModelNumber(String modelNumber);
 
-    int countByModelNumber(String modelNumber, String categoryName);
+    List<Products> findProductsByCategoryId(int categoryId);
 
 }
