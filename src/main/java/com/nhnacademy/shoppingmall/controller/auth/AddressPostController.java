@@ -9,6 +9,7 @@ import com.nhnacademy.shoppingmall.common.mvc.annotation.RequestMapping.Method;
 import com.nhnacademy.shoppingmall.common.mvc.controller.BaseController;
 import com.nhnacademy.shoppingmall.user.domain.User;
 import com.nhnacademy.shoppingmall.user.domain.UsersAddress;
+import com.nhnacademy.shoppingmall.user.exception.UserAlreadyExistsException;
 import com.nhnacademy.shoppingmall.user.exception.UsersAddressAlreadyExistsException;
 import com.nhnacademy.shoppingmall.user.repository.UserAddressRepository;
 import com.nhnacademy.shoppingmall.user.repository.impl.UserAddressRepositoryImpl;
@@ -30,7 +31,7 @@ public class AddressPostController implements BaseController {
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
         HttpSession session = req.getSession();
         if (Objects.isNull(session) || Objects.isNull(session.getAttribute("user"))) {
-            return "redirect:/index.do";
+            throw new RuntimeException("로그인 후에 진행하세요.");
         }
         User user = (User) session.getAttribute("user");
 
@@ -47,14 +48,14 @@ public class AddressPostController implements BaseController {
             addressRepository.save(address);
         } catch (AddressAlreadyExistsException e) {
             log.debug(e.getMessage());
-            return "/shop/main/address_page";
+            throw new AddressAlreadyExistsException();
         }
         UsersAddress usersAddress = new UsersAddress( user.getUserId(),address.getAddress_id() );
         try {
             userAddressRepository.save(usersAddress);
         } catch (UsersAddressAlreadyExistsException e) {
             log.debug(e.getMessage());
-            return "/shop/main/address_page";
+            throw new UserAlreadyExistsException(user.getUserId());
         }
         // 이렇게 갱신시켜서 보내줘도 되나?
         session.setAttribute("addresses", usersAddressService.findByUserId(user.getUserId()));

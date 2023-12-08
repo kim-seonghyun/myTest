@@ -18,5 +18,6 @@
     <div class="order-result"><% if (user != null) { %>
         <p>주문 결과: 사용자 포인트는 <%= user.getUserPoint() %>
         입니다.</p>
+        <p>추후 <%= request.getAttribute("pointToAdd") %>만큼의 포인트가 적립됩니다.</p>
         <% } else { %> <p>로그인이 필요합니다.</p> <% } %></div>
 </div>

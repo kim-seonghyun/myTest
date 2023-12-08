@@ -70,11 +70,7 @@ public class OrderServicesImpl implements OrderServices {
                     throw new RuntimeException("shopping cart 삭제 안됨.");
                 }
             }
-//            List<OrderDetails> orderDetailsList = orderDetailRepository.findOrderDetailByOrderId(orderId);
 
-//            int totalCost =  orderDetailsList.stream()
-//                    .mapToInt(orderDetails -> orderDetails.getQuantity() * orderDetails.getUnitCost()).sum();
-//
             User user = userService.getUser(orders.getUserId());
             int totalCost = orderDetailRepository.getTotalCost(orderId);
 
@@ -86,7 +82,8 @@ public class OrderServicesImpl implements OrderServices {
             userPoint -= totalCost;
             user.setUserPoint(userPoint);
             log.debug("OrderService - 성공");
-            return userService.updateUser(user);
+            userService.updateUser(user);
+            return orderId;
             //포인트 적립 요청.
         } catch (InsufficientBalanceException e) {
             throw new InsufficientBalanceException(e.getMessage());

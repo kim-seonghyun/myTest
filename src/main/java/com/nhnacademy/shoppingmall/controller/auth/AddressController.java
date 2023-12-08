@@ -15,7 +15,7 @@ public class AddressController implements BaseController {
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
         HttpSession session = req.getSession(false);
         if (Objects.isNull(session) || Objects.isNull(session.getAttribute("user"))) {
-            return "redirect:/index.do";
+            throw new RuntimeException("로그인 후에 진행하세요.");
         } else {
             return "/shop/main/address_page";
         }

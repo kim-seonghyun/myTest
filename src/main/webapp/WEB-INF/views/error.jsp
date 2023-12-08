@@ -1,43 +1,40 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: gimseonghyeon
-  Date: 12/3/23
-  Time: 3:44 PM
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" trimDirectiveWhitespaces="true" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
     <title>Error Page</title>
-    <link rel="stylesheet" href="style.css"/>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
 <body>
 
-<table>
-    <tbody>
-    <tr>
-        <th>status_code</th>
-        <td><c:out value="${status_code}"/></td>
-    </tr>
-    <tr>
-        <th>exception_type</th>
-        <td><c:out value="${exception_type}"/></td>
-    </tr>
-    <tr>
-        <th>message</th>
-        <td><c:out value="${message}"/></td>
-    </tr>
-    <tr>
-        <th>exception</th>
-        <td><c:out value="${exception}"/></td>
-    </tr>
-    <tr>
-        <th>request_uri</th>
-        <td><c:out value="${request_uri}"/></td>
-    </tr>
-    </tbody>
+<div class="container mt-5">
+    <h1 class="text-center">잠깐!</h1>
 
-</table>
+    <div class="alert alert-danger mt-4" role="alert">
+        <strong>Message:</strong> <c:out value="${message}"/>. 에러가 발생했습니다. 다시 시도해주세요.
+    </div>
+
+    <table class="table table-striped mt-4">
+        <tbody>
+        <tr>
+            <th>Status Code</th>
+            <td><c:out value="${status_code}"/></td>
+        </tr>
+        <tr>
+            <th>Exception Type</th>
+            <td><c:out value="${exception_type}"/></td>
+        </tr>
+        <tr>
+            <th>Exception</th>
+            <td><c:out value="${exception}"/></td>
+        </tr>
+        <tr>
+            <th>Request URI</th>
+            <td><c:out value="${request_uri}"/></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 </body>
 </html>

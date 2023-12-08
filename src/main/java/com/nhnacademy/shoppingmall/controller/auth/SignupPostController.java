@@ -29,13 +29,13 @@ public class SignupPostController implements BaseController {
             User user = new User(id, name, password, userBirth, Auth.ROLE_USER, 1_000_000, LocalDateTime.now(), null);
             log.debug(user.toString());
             userService.saveUser(user);
-            return "shop/main/index";
+            return "redirect:/index.do";
         } catch (UserAlreadyExistsException e) {
             log.debug("유저가 이미 존재함 !");
-            return "redirect:/signup.do";
+            throw new UserAlreadyExistsException(e.getMessage());
         } catch (RuntimeException e) {
             log.debug("런타임 에러 발생 !");
-            return "redirect:/signup.do";
+            throw new RuntimeException(e.getMessage());
         }
     }
 }

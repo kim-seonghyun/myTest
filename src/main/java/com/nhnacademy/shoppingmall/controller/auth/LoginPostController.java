@@ -49,7 +49,7 @@ public class LoginPostController implements BaseController {
             session.setAttribute("addresses", addresses);
             return "redirect:/index.do";
         } catch (UserNotFoundException e) {
-            return "redirect:/login.do";
+            throw new UserNotFoundException(e.getMessage());
         }
     }
 }

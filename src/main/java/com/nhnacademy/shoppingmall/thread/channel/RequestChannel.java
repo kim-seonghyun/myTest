@@ -3,6 +3,7 @@ package com.nhnacademy.shoppingmall.thread.channel;
 
 import com.nhnacademy.shoppingmall.thread.request.ChannelRequest;
 
+import com.nhnacademy.shoppingmall.thread.request.impl.PointChannelRequest;
 import java.util.LinkedList;
 import java.util.Queue;
 

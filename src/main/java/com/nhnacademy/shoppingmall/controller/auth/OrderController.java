@@ -46,7 +46,6 @@ public class OrderController implements BaseController {
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
-        log.debug("OrderController 실행됨");
         HttpSession session = req.getSession(false);
         if (Objects.isNull(session) || Objects.isNull(session.getAttribute("user"))) {
             throw new RuntimeException("로그인 후 사용해 주세요");
@@ -55,18 +54,21 @@ public class OrderController implements BaseController {
         String userId = user.getUserId();
         LocalDateTime shipDate = LocalDateTime.now().plusDays(2);
         Orders orders = new Orders(userId, LocalDateTime.now(), shipDate);
-        log.debug("user가 Order하면 왜 안되는 걸까?");
-        orderServices.order(orders);
+        int orderId = orderServices.order(orders);
         int pointAfterOrder = userService.getPoint(userId);
-        user.setUserPoint(pointAfterOrder);
+
         //쓰레드 호출.
         RequestChannel requestChannel = (RequestChannel) req.getServletContext().getAttribute("requestChannel");
-        int pointToAdd =  (int)(pointAfterOrder * ((double) 10/100));
+        int pointToAdd = (int) (orderDetailRepository.getTotalCost(orderId) * (0.1));
+        log.debug(String.valueOf(pointToAdd));
+        user.setUserPoint(pointAfterOrder);
         try {
-            requestChannel.addRequest(new PointChannelRequest(userId,pointToAdd ));
+            requestChannel.addRequest(new PointChannelRequest(userId, pointAfterOrder + pointToAdd ));
         } catch (InterruptedException e) {
             throw new RuntimeException(e.getMessage());
         }
+        req.setAttribute("pointAfterOrder" , pointAfterOrder);
+        req.setAttribute("pointToAdd", pointToAdd);
         return "shop/main/order_result";
         // 주문 성공 띄우기
     }

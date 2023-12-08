@@ -43,6 +43,7 @@ public class UserRepositoryImpl implements UserRepository {
                         Objects.nonNull(rs.getTimestamp("latest_login_at")) ? rs.getTimestamp("latest_login_at")
                                 .toLocalDateTime() : null
                 );
+                log.debug(user.getUserId());
                 return Optional.of(user);
             }
         } catch (SQLException e) {

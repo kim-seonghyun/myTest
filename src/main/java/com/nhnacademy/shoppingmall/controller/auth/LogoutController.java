@@ -16,7 +16,6 @@ public class LogoutController implements BaseController {
         HttpSession session = req.getSession(false);
         if (Objects.nonNull(session) && (Objects.nonNull( session.getAttribute("user")))){
                 session.invalidate();
-
         }
         return "redirect:/login.do";
     }
