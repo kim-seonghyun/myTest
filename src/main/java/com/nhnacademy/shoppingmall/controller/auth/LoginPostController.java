@@ -3,6 +3,8 @@ package com.nhnacademy.shoppingmall.controller.auth;
 import com.nhnacademy.shoppingmall.address.domain.Address;
 import com.nhnacademy.shoppingmall.common.mvc.annotation.RequestMapping;
 import com.nhnacademy.shoppingmall.common.mvc.controller.BaseController;
+import com.nhnacademy.shoppingmall.thread.channel.RequestChannel;
+import com.nhnacademy.shoppingmall.thread.request.impl.PointChannelRequest;
 import com.nhnacademy.shoppingmall.user.domain.User;
 import com.nhnacademy.shoppingmall.user.domain.User.Auth;
 import com.nhnacademy.shoppingmall.user.exception.UserNotFoundException;
@@ -11,6 +13,7 @@ import com.nhnacademy.shoppingmall.user.service.UserService;
 import com.nhnacademy.shoppingmall.user.service.UsersAddressService;
 import com.nhnacademy.shoppingmall.user.service.impl.UserServiceImpl;
 import com.nhnacademy.shoppingmall.user.service.impl.UsersAddressServiceImpl;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -25,7 +28,7 @@ public class LoginPostController implements BaseController {
 
     private final UserService userService = new UserServiceImpl(new UserRepositoryImpl());
     private final UsersAddressService usersAddressService = new UsersAddressServiceImpl();
-
+    private final int FIRST_LOGIN_POINT = 10_000;
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
         //todo#13-2 로그인 구현, session은 60분동안 유지됩니다.
@@ -34,6 +37,18 @@ public class LoginPostController implements BaseController {
 
         try {
             User user = userService.doLogin(id, pwd);
+            LocalDate lastLogin = user.getLatestLoginAt().toLocalDate();
+            LocalDate now = LocalDate.now();
+
+            if (lastLogin.isBefore(now)) {
+                try {
+                    RequestChannel requestChannel = (RequestChannel) req.getServletContext().getAttribute("requestChannel");
+                    requestChannel.addRequest(new PointChannelRequest(user.getUserId(), user.getUserPoint() + FIRST_LOGIN_POINT));
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e.getMessage());
+                }
+            }
+
             user.setLatestLoginAt(LocalDateTime.now());
             userService.updateUser(user);
             HttpSession session = req.getSession();
@@ -44,9 +59,9 @@ public class LoginPostController implements BaseController {
             if (user.getUserAuth().equals(Auth.ROLE_ADMIN)) {
                 return "redirect:/admin/index.do";
             }
-
             List<Address> addresses = usersAddressService.findByUserId(user.getUserId());
             session.setAttribute("addresses", addresses);
+
             return "redirect:/index.do";
         } catch (UserNotFoundException e) {
             throw new UserNotFoundException(e.getMessage());
