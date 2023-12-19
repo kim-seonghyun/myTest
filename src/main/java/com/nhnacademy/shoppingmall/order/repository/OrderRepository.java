@@ -11,4 +11,11 @@ public interface OrderRepository {
     int update(Orders orders);
 
     int delete(int orderId);
+
+    /**
+     * 주문하는 method입니다.
+     * @param order
+     * @return
+     */
+    int order(Orders order);
 }

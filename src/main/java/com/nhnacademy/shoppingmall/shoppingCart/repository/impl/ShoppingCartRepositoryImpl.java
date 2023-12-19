@@ -10,6 +10,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Objects;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 
 public class ShoppingCartRepositoryImpl implements ShoppingCartRepository {
     ProductsRepository productsRepository = new ProductRepositoryImpl();
@@ -72,6 +75,8 @@ public class ShoppingCartRepositoryImpl implements ShoppingCartRepository {
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, cartId);
             preparedStatement.setInt(2, productId);
+            log.debug("삭제할 장바구니 cart ID={}",cartId);
+            log.debug("삭제할 장바구니 productID={}",productId);
             return preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);

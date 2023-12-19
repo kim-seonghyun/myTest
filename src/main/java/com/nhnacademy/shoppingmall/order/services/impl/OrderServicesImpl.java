@@ -23,6 +23,10 @@ import org.apache.commons.dbcp2.DelegatingConnection;
 public class OrderServicesImpl implements OrderServices {
     // Order, orderDetail, ShoppingCart, Product, users
 
+    public OrderServicesImpl(OrderRepository orderRepository) {
+        this.orderRepository = orderRepository;
+    }
+
     OrderRepository orderRepository;
     OrderDetailRepository orderDetailRepository;
 
@@ -43,19 +47,30 @@ public class OrderServicesImpl implements OrderServices {
     }
 
 
+    public int easyOrder(Orders orders){
+        Connection connection = DbConnectionThreadLocal.getConnection();
+
+        try {
+            return orderRepository.order(orders);
+        } catch (RuntimeException e) {
+            DbConnectionThreadLocal.setSqlError(true);
+            throw new RuntimeException("주문 실패");
+        }
+
+    }
+
     @Override
     public int order(Orders orders) {
         Connection connection = DbConnectionThreadLocal.getConnection();
         String sql = "select P.UnitCost, P.ProductID, SC.Quantity from Products P join ShoppingCart SC on P.ProductID = SC.ProductID where SC.CartID = ?";
-        log.debug("order 실행됨");
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             int orderId = orderRepository.save(orders);
             log.debug("orderID order실행중:" + String.valueOf(orderId));
             preparedStatement.setString(1, orders.getUserId());
 
             ResultSet rs = preparedStatement.executeQuery();
-
             while (rs.next()) {
+
                 OrderDetails myOrderDetails = new OrderDetails(orderId, rs.getInt("ProductID"), rs.getInt("Quantity"),
                         rs.getInt("UnitCost"));
 
@@ -67,6 +82,7 @@ public class OrderServicesImpl implements OrderServices {
 
                 int deleteResult = shoppingCartService.delete(orders.getUserId(), myOrderDetails.getProductId());
                 if (deleteResult < 1) {
+                    DbConnectionThreadLocal.setSqlError(true);
                     throw new RuntimeException("shopping cart 삭제 안됨.");
                 }
             }

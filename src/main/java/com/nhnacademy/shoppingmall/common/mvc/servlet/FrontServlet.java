@@ -50,14 +50,7 @@ public class FrontServlet extends HttpServlet {
         DbConnectionThreadLocal.initialize();
         try {
             //todo#7-3 Connection pool로 부터 connection 할당 받습니다. connection은 Thread 내에서 공유됩니다.
-            // controller 받아옴
-            log.debug(req.getServletPath());
             BaseController baseController = (BaseController) controllerFactory.getController(req);
-            log.debug("Factory = {}", controllerFactory);
-            log.debug("baseController = {}", baseController);
-            log.debug(baseController.getClass().getName());
-
-            // controller로 부터 JSP 경로 받아옴.
             String viewName = baseController.execute(req, resp);
 
             if (viewResolver.isRedirect(viewName)) {
@@ -67,7 +60,7 @@ public class FrontServlet extends HttpServlet {
                 resp.sendRedirect(viewResolver.getRedirectUrl(redirectUrl));
             } else {
                 String layout = viewResolver.getLayOut(viewName);
-                log.debug("viewName:{}", viewResolver.getPath(viewName));
+                // content holder???
                 req.setAttribute(ViewResolver.LAYOUT_CONTENT_HOLDER, viewResolver.getPath(viewName));
                 RequestDispatcher rd = req.getRequestDispatcher(layout);
                 rd.include(req, resp);

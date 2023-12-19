@@ -32,6 +32,7 @@ import java.util.stream.Stream;
 @Slf4j
 class ControllerFactoryTest {
     static final ControllerFactory controllerFactory = new ControllerFactory();
+
     static final ServletContext ctx = Mockito.mock(ServletContext.class);
     static Set<Class<?>> classSet;
     static final HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
@@ -48,7 +49,6 @@ class ControllerFactoryTest {
     @Test
     @Order(1)
     void initialize() throws Exception {
-
         Try<Object> s =  ReflectionUtils.tryToReadFieldValue(ControllerFactory.class,"beanMap",controllerFactory);
         ConcurrentMap<String,Object> beanMap = (ConcurrentMap<String, Object>) s.get();
         Assertions.assertAll(
@@ -90,7 +90,7 @@ class ControllerFactoryTest {
     @DisplayName("getKey")
     void getKey(String paramMethod, String paramPath) throws Exception {
 
-        Method method = ControllerFactory.class.getDeclaredMethod("getKey", String.class,String.class );
+        Method method = ControllerFactory.class.getDeclaredMethod("getKey", String.class, String.class);
         method.setAccessible(true);
         String key = (String) method.invoke(controllerFactory,paramMethod,paramPath);
         Assertions.assertEquals(String.format("%s-%s",paramMethod,paramPath),key);

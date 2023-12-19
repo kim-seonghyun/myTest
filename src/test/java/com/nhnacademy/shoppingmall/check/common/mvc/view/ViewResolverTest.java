@@ -28,7 +28,6 @@ class ViewResolverTest {
 
     @Test
     void getPath() {
-
         String expected = "/WEB-INF/views/main/index.jsp";
         Assertions.assertAll(
                 ()->Assertions.assertEquals(expected,viewResolver.getPath("main/index")),

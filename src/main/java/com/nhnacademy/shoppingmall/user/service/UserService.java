@@ -19,4 +19,6 @@ public interface UserService {
 
     int getPoint(String userId);
 
+    boolean canLogin(String userId, String userPassword);
+
 }

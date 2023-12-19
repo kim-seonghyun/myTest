@@ -6,7 +6,8 @@ import java.sql.SQLException;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Connection을 ThreadLocal에 저장하고 관리. 각 Thread는 독립적인 connection을 가짐. Thread -> HttpMehtod 요청 하나마다 쓰레드 하나씩 THread별로
+ * Connection을 ThreadLocal에 추가, 삭제. 각 Thread는 독립적인 connection을 가짐.
+ * Thread -> HttpMehtod 요청 하나마다 쓰레드 하나씩 THread별로
  * Connection을 나누고 싶어서.
  */
 @Slf4j
@@ -42,7 +43,6 @@ public class DbConnectionThreadLocal {
 
     /**
      * 현재 thread의 connection 반환.
-     *
      * @return
      */
     public static Connection getConnection() {

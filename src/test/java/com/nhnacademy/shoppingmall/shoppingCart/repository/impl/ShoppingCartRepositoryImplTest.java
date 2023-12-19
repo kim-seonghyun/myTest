@@ -89,4 +89,5 @@ class ShoppingCartRepositoryImplTest {
         int result = shoppingCartRepository.deleteProductByProductId(shoppingCart.getCartId(), shoppingCart.getProductId());
         Assertions.assertEquals(1, result);
     }
+
 }

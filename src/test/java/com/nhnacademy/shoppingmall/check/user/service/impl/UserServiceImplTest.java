@@ -28,7 +28,7 @@ class UserServiceImplTest {
 
     UserRepository userRepository = Mockito.mock(UserRepository.class);
     UserService userService = new UserServiceImpl(userRepository);
-    User testUser = testUser=new User("nhnacademy-test-user","nhn아카데미","nhnacademy-test-password","19900505", User.Auth.ROLE_USER,100_0000, LocalDateTime.now(),LocalDateTime.now());
+    User testUser =new User("nhnacademy-test-user","nhn아카데미","nhnacademy-test-password","19900505", User.Auth.ROLE_USER,100_0000, LocalDateTime.now(),LocalDateTime.now());
 
     @Test
     @DisplayName("getUser")
@@ -66,6 +66,8 @@ class UserServiceImplTest {
 
     }
 
+    //Service만 확인하겠다?
+    // userRepository의 countByUserId를 호출하면 1을 리턴한다.
     @Test
     @DisplayName("save user -aready exist user")
     void saveUser_exist(){
@@ -110,6 +112,7 @@ class UserServiceImplTest {
         Mockito.verify(userRepository,Mockito.times(1)).updateLatestLoginAtByUserId(anyString(),any());
     }
 
+    //그냥 메서드 호출되는지 확인하는거네.
     @Test
     @DisplayName("login fail")
     void doLogin_fail(){
@@ -117,5 +120,4 @@ class UserServiceImplTest {
         Assertions.assertThrows(UserNotFoundException.class,()->userService.doLogin(testUser.getUserId(), testUser.getUserPassword()));
         Mockito.verify(userRepository,Mockito.times(1)).findByUserIdAndUserPassword(anyString(),anyString());
     }
-
 }

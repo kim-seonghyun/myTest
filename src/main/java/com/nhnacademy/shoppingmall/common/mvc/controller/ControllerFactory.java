@@ -17,13 +17,10 @@ public class ControllerFactory {
     private final ConcurrentMap<String, Object> beanMap = new ConcurrentHashMap<>();
 
     public void initialize(Set<Class<?>> c, ServletContext ctx) {
-
         if (Objects.isNull(c)) {
             log.info("Controller not found");
             return;
         }
-
-
 
         /*todo#5-1 ControllerFactory 초기화, 아래 설명을 참고하여 구현합니다.
          * 1. Set<Class<?>> c 에는 com.nhnacademy.shoppingmall.common.initialize.WebAppInitializer 에서  HandlesTypes에

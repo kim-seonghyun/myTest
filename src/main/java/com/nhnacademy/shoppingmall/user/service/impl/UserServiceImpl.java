@@ -87,6 +87,12 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    /**
+     * 로그인 성공시 유저정보 반환
+     * @param userId
+     * @param userPassword
+     * @return
+     */
     @Override
     public User doLogin(String userId, String userPassword) {
         //todo#4-5 로그인 구현, userId, userPassword로 일치하는 회원 조회
@@ -108,6 +114,17 @@ public class UserServiceImpl implements UserService {
             throw new UserNotFoundException(userId);
         }
 
+    }
+
+    @Override
+    public boolean canLogin(String userId, String userPassword) {
+        Optional<User> optionalUser = userRepository.findByUserIdAndUserPassword(userId, userPassword);
+        if (optionalUser.isPresent()) {
+            userRepository.updateLatestLoginAtByUserId(userId, LocalDateTime.now());
+            return true;
+        }else{
+            return false;
+        }
     }
 
 }
