@@ -13,6 +13,7 @@
     // 서버에서 이미지 리스트를 가져옵니다.
     List<Products> productsList = (List<Products>) request.getAttribute("productsList");
     List<Categories> categoriesList = (List<Categories>) request.getAttribute("categories");
+    int totalPageSize = (int) request.getAttribute("totalPageSize");
 %>
 
 
@@ -53,4 +54,13 @@
         </div>
     </div>
     <% } %>
+    <div class="pagination">
+        <%
+            for(int i = 1; i <= totalPageSize; i++) {
+        %>
+        <a href="<%= "/index.do?page=" + i %>"> <%= i %> </a>
+        <%
+            }
+        %>
+    </div>
 </div>

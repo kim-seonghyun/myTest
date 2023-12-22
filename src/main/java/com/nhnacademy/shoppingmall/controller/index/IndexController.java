@@ -5,6 +5,9 @@ import static com.nhnacademy.shoppingmall.common.mvc.view.ViewResolver.getImageD
 import com.nhnacademy.shoppingmall.categories.domain.Categories;
 import com.nhnacademy.shoppingmall.categories.repository.CategoriesRepository;
 import com.nhnacademy.shoppingmall.categories.repository.impl.CategoriesRepositoryImpl;
+import com.nhnacademy.shoppingmall.common.page.Service.PageService;
+import com.nhnacademy.shoppingmall.common.page.Service.impl.PageServiceImpl;
+import com.nhnacademy.shoppingmall.common.page.repository.impl.PageRepositoryImpl;
 import com.nhnacademy.shoppingmall.products.domain.Products;
 import com.nhnacademy.shoppingmall.products.repository.ProductsRepository;
 import com.nhnacademy.shoppingmall.products.repository.impl.ProductRepositoryImpl;
@@ -15,20 +18,29 @@ import java.util.List;
 import java.util.Objects;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 
 @RequestMapping(method = RequestMapping.Method.GET,value = {"/index.do"})
+@Slf4j
 public class IndexController implements BaseController {
-    ProductsRepository productsRepository = new ProductRepositoryImpl();
-    CategoriesRepository categoriesRepository = new CategoriesRepositoryImpl();
+    private PageService pageService = new PageServiceImpl(new PageRepositoryImpl());
+    private CategoriesRepository categoriesRepository = new CategoriesRepositoryImpl();
+
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
-        List<Products> productsList = productsRepository.findAll();
-        productsList.forEach(products -> products.setProductImage(getImageDir(products.getProductImage())));
-        req.setAttribute("productsList", productsList);
+        final int PAGE_SIZE = 8;
+        int currentPage = (req.getParameter("page") == null) ? 1 : Integer.parseInt(req.getParameter("page"));
+        List<Products> productListPage = pageService.getProductContents(currentPage, PAGE_SIZE);
+        log.debug(String.valueOf(currentPage));
+//        List<Products> productsList = productsRepository.findAll();
+        productListPage.forEach(products -> products.setProductImage(getImageDir(products.getProductImage())));
+        req.setAttribute("productsList", productListPage);
         List<Categories> categoriesList = categoriesRepository.findAll();
         if(Objects.nonNull(categoriesList)){
             req.setAttribute("categories", categoriesList);
         }
+        int totalPageSize = pageService.productToTalPage(PAGE_SIZE);
+        req.setAttribute("totalPageSize", totalPageSize);
         return "shop/main/index";
     }
 }
