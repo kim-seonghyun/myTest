@@ -43,6 +43,7 @@ class PageRepositoryImplTest {
     void getProductContents() {
         List<Products> productsList = pageRepository.getProductContents(1, 10);
         Assertions.assertEquals(10, productsList.size());
-        
+        List<Products> productsList1 = pageRepository.getProductContents(2, 10);
+        Assertions.assertEquals(10, productsList1.size());
     }
 }
