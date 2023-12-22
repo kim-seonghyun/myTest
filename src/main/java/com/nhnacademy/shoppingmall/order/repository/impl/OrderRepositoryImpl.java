@@ -132,51 +132,8 @@ public class OrderRepositoryImpl implements OrderRepository {
     }
 
     @Override
-    public int order(Orders orders) {
-        Connection connection = DbConnectionThreadLocal.getConnection();
-        String sql = "select P.UnitCost, P.ProductID, SC.Quantity from Products P join ShoppingCart SC on P.ProductID = SC.ProductID where SC.CartID = ?";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            int orderId = this.save(orders);
-            preparedStatement.setString(1, orders.getUserId());
-
-            ResultSet rs = preparedStatement.executeQuery();
-
-            while (rs.next()) {
-                OrderDetails myOrderDetails = new OrderDetails(orderId, rs.getInt("ProductID"), rs.getInt("Quantity"),
-                        rs.getInt("UnitCost"));
-
-                orderDetailRepository.save(myOrderDetails);
-                if (orderDetailRepository.findOrderDetailByOrderIdAndProductId(myOrderDetails.getOrderId(),
-                        myOrderDetails.getProductId()).isEmpty()) {
-                    throw new RuntimeException("orderDetail 저장안됨");
-                }
-
-                int deleteResult = shoppingCartService.delete(orders.getUserId(), myOrderDetails.getProductId());
-                if (deleteResult < 1) {
-                    DbConnectionThreadLocal.setSqlError(true);
-                    throw new RuntimeException("shopping cart 삭제 안됨.");
-                }
-            }
-
-            User user = userService.getUser(orders.getUserId());
-            int totalCost = orderDetailRepository.getTotalCost(orderId);
-
-            // int로 부족한경우는?
-            int userPoint = user.getUserPoint();
-            if (userPoint < totalCost) {
-                throw new InsufficientBalanceException(user.getUserId());
-            }
-            userPoint -= totalCost;
-            user.setUserPoint(userPoint);
-            userService.updateUser(user);
-            return orderId;
-            //포인트 적립 요청.
-        } catch (InsufficientBalanceException e) {
-            throw new InsufficientBalanceException(e.getMessage());
-        }catch (RuntimeException | SQLException e) {
-            DbConnectionThreadLocal.setSqlError(true);
-            throw new RuntimeException(e);
-        }
+    public int order(Orders order) {
+        return 0;
     }
 
 

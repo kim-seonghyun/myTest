@@ -127,8 +127,6 @@ class OrderServicesImplTest {
                 });},
                 () ->{Assertions.assertEquals(INSUFFICIENT_POINT, userService.getUser(testOrder.getUserId()).getUserPoint());}
         );
-
-
     }
 
 

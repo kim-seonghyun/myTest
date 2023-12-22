@@ -18,7 +18,6 @@ public class ShoppingCartDeleteController implements BaseController {
     ShoppingCartService shoppingCartService = new ShoppingCartServiceImpl(new ShoppingCartRepositoryImpl());
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
-
         int productId = Integer.parseInt(req.getParameter("productId"));
         HttpSession session = req.getSession();
         User user = (User) session.getAttribute("user");
