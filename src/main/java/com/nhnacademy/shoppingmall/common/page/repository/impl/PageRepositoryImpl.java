@@ -32,6 +32,25 @@ public class PageRepositoryImpl implements PageReopsitory {
     }
 
     @Override
+    public int productTotalPage(int pageSize, int categoryId) {
+        Connection connection = DbConnectionThreadLocal.getConnection();
+        String sql = "select count(*) from Products where CategoryID = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, categoryId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                int totalRows = rs.getInt(1);
+                return Math.round(totalRows / pageSize);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return 0;
+    }
+
+    @Override
     public List<Products> getProductContents(int pageNumber, int pageSize) {
         Connection connection = DbConnectionThreadLocal.getConnection();
         String sql = "select * from Products limit ?, ?";
@@ -39,6 +58,29 @@ public class PageRepositoryImpl implements PageReopsitory {
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, pageNumber * pageSize);
             preparedStatement.setInt(2, pageSize);
+
+            ResultSet rs = preparedStatement.executeQuery();
+            List<Products> productsList = new ArrayList<>();
+            while (rs.next()) {
+                productsList.add(new Products(rs.getInt("ProductID"), rs.getInt("CategoryID"), rs.getString("ModelNumber"),
+                        rs.getString("ModelName"), rs.getString("ProductImage"), rs.getInt("UnitCost"),
+                        rs.getString("Description")));
+            }
+            return productsList;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<Products> getProductContents(int pageNumber, int pageSize, int categoryId) {
+        Connection connection = DbConnectionThreadLocal.getConnection();
+        String sql = "select * from Products where Products.CategoryID = ? limit ?, ?";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, categoryId);
+            preparedStatement.setInt(2, pageNumber * pageSize);
+            preparedStatement.setInt(3, pageSize);
 
             ResultSet rs = preparedStatement.executeQuery();
             List<Products> productsList = new ArrayList<>();

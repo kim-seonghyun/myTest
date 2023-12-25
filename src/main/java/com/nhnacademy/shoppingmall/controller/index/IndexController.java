@@ -29,18 +29,31 @@ public class IndexController implements BaseController {
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
         final int PAGE_SIZE = 8;
+        String categoryId = req.getParameter("categoryId");
+        log.debug("categoryId={}", categoryId);
+
         int currentPage = (req.getParameter("page") == null) ? 1 : Integer.parseInt(req.getParameter("page"));
-        List<Products> productListPage = pageService.getProductContents(currentPage, PAGE_SIZE);
-        log.debug(String.valueOf(currentPage));
-//        List<Products> productsList = productsRepository.findAll();
+        List<Products> productListPage = null;
+        int totalPageSize = 0;
+        if (Objects.isNull(categoryId)) {
+            totalPageSize = pageService.productToTalPage(PAGE_SIZE);
+            productListPage = pageService.getProductContents(currentPage, PAGE_SIZE);
+            log.debug(String.valueOf(currentPage));
+        }else{
+            totalPageSize = pageService.productTotalPage(PAGE_SIZE, Integer.parseInt(categoryId));
+             productListPage = pageService.getProductContents(currentPage, PAGE_SIZE,
+                     Integer.parseInt(categoryId));
+        }
         productListPage.forEach(products -> products.setProductImage(getImageDir(products.getProductImage())));
         req.setAttribute("productsList", productListPage);
         List<Categories> categoriesList = categoriesRepository.findAll();
         if(Objects.nonNull(categoriesList)){
             req.setAttribute("categories", categoriesList);
         }
-        int totalPageSize = pageService.productToTalPage(PAGE_SIZE);
+        log.debug("totalPageSIze={}",totalPageSize);
         req.setAttribute("totalPageSize", totalPageSize);
+
+
         return "shop/main/index";
     }
 }

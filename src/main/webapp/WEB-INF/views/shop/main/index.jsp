@@ -13,8 +13,10 @@
     // 서버에서 이미지 리스트를 가져옵니다.
     List<Products> productsList = (List<Products>) request.getAttribute("productsList");
     List<Categories> categoriesList = (List<Categories>) request.getAttribute("categories");
-    int totalPageSize = (int) request.getAttribute("totalPageSize");
-%>
+    Integer totalPageSize = (Integer) request.getAttribute("totalPageSize");
+    if (totalPageSize == null) {
+        totalPageSize = 0;  // 기본값 설정
+    }%>
 
 
 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">

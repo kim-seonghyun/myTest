@@ -22,7 +22,17 @@ public class PageServiceImpl implements PageService {
     }
 
     @Override
+    public int productTotalPage(int pagesize, int categoryId) {
+        return pageReopsitory.productTotalPage(pagesize, categoryId);
+    }
+
+    @Override
     public List<Products> getProductContents(int number, int pagesize) {
         return pageReopsitory.getProductContents(number, pagesize);
+    }
+
+    @Override
+    public List<Products> getProductContents(int number, int pagesize, int categoryId) {
+        return pageReopsitory.getProductContents(number, pagesize, categoryId);
     }
 }
