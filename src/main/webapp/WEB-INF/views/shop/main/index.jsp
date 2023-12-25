@@ -1,7 +1,8 @@
 <%@ page import="com.nhnacademy.shoppingmall.products.domain.Products" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.nhnacademy.shoppingmall.categories.domain.Categories" %>
-<%@ page import="java.util.Objects" %><%--
+<%@ page import="java.util.Objects" %>
+<%@ page import="com.nhnacademy.shoppingmall.products.domain.RecentViewProducts" %><%--
   Created by IntelliJ IDEA.
   User: nhn
   Date: 2023/11/08
@@ -16,10 +17,33 @@
     Integer totalPageSize = (Integer) request.getAttribute("totalPageSize");
     if (totalPageSize == null) {
         totalPageSize = 0;  // 기본값 설정
-    }%>
+    }
+    RecentViewProducts recentViewProducts = (RecentViewProducts) session.getAttribute("recentViewProducts");
+%>
 
-
+<h2>최근 본 상품</h2>
 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+    <% for (Products products : recentViewProducts.getRecentViewProducts()) { %>
+    <div class="col">
+        <div class="card shadow-sm">
+            <img class="card-img-top" src="<%= products.getProductImage() %>" onerror="this.src='resources/no-image.png';" alt="resources/no-image.png" width="100%" height="225">
+            <div class="card-body">
+                <h5 class="card-title text-primary">상품 이름 : <%= products.getModelName() %></h5>
+                <p class="card-text"><small class="text-muted">상품 설명 : </small><%= products.getDescription() %></p>
+                <p class="card-text"><small class="text-muted">상품 가격 : </small><%= products.getUnitCost() %></p>
+                <p class="card-text"><small class="text-muted">상품 번호 : </small><%= products.getProductId() %></p>
+
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="btn-group">
+                        <button type="button" onclick="location.href='/addShoppingCart.do?productId=<%= products.getProductId() %>'" class="btn btn-sm btn-outline-secondary">장바구니에 추가</button>
+                        <button type="button" onclick="location.href='/getProductDetail.do?productId=<%= products.getProductId() %>'" class="btn btn-sm btn-outline-secondary">상품 자세히 보기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <% } %>
+
     <form method="POST" action="/index.do">
         <div class="form-floating">
             <select class="form-select" id="categoryId" name="categoryId" required>
@@ -50,6 +74,7 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <div class="btn-group">
                         <button type="button" onclick="location.href='/addShoppingCart.do?productId=<%= products.getProductId() %>'" class="btn btn-sm btn-outline-secondary">장바구니에 추가</button>
+                        <button type="button" onclick="location.href='/getProductDetail.do?productId=<%= products.getProductId() %>'" class="btn btn-sm btn-outline-secondary">상품 자세히 보기</button>
                     </div>
                 </div>
             </div>
